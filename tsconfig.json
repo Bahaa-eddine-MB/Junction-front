@@ -15,7 +15,9 @@
     "incremental": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@/components/*": ["./components/*"]
+      "@/components/*": ["./src/components/*"],
+      "@/icons/*": ["./public/icons/*"],
+      "@/images/*": ["./public/images/*"]
 
     }
   },
