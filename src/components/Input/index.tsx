@@ -30,28 +30,32 @@ const Input = ({
       <div className="relative pt-2">
         <div className="flex justify-between">
           <input
-            type={!isHidden ? "password" : "text"}
+            type={(!isHidden && password) ? "password" : "text"}
             {...inputProps}
-            className={`focus:outline-none px-4 disabled:text-thirdColor placeholder-text-secondaryColor placeholder-opacity-60 grow w-full ${
+            className={`focus:outline-none px-4 bg-transparent disabled:text-thirdColor placeholder-text-secondaryColor placeholder-opacity-60 grow w-full ${
               error
                 ? "text-mainRed caret-mainRed"
                 : "text-secondaryColor caret-secondaryColor"
             } `}
           />
-          <Image
-            onClick={() => {
-              setHidden(!isHidden);
-            }}
-            className="hover:cursor-pointer mr-4"
-            src={isHidden ? eyeOff : eye}
-            alt="eye"
-          />
+          {password ? (
+            <Image
+              onClick={() => {
+                setHidden(!isHidden);
+              }}
+              className="hover:cursor-pointer mr-4"
+              src={isHidden ? eyeOff : eye}
+              alt="eye"
+            />
+          ) : (
+            <></>
+          )}
         </div>
 
         <div className="pt-2">
           <div
-            className={`w-full border-1 ${
-              !error ? "border-primaryColor" : "border-mainRed"
+            className={`w-full border-[1px] ${
+              !error ? "border-thirdColor" : "border-mainRed"
             }`}
           />
         </div>
