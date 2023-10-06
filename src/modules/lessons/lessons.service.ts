@@ -1,26 +1,72 @@
-import { Injectable } from '@nestjs/common';
-import { CreateLessonDto } from './dto/create-lesson.dto';
-import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { lessonDto } from './dto/lesson.dto';
 
 @Injectable()
 export class LessonsService {
-  create(createLessonDto: CreateLessonDto) {
-    return 'This action adds a new lesson';
+  constructor(private readonly prisma: PrismaService) {}
+  async create(body: lessonDto, userId: string) {
+    try {
+      const teacher = await this.prisma.teacher.findUnique({
+        where: {
+          userId,
+        },
+      });
+      if (!teacher) throw new BadRequestException('Teacher does not exist');
+      this.prisma.lessons.create({
+        data: {
+          title: body.title,
+          url: body.url,
+          courses: {
+            connect: {
+              id: body.coursesId,
+            },
+          },
+          teacher: {
+            connect: {
+              id: teacher.id,
+            },
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw new BadRequestException('Cannot create lesson');
+    }
   }
 
-  findAll() {
-    return `This action returns all lessons`;
+  async findAll(coursesId: string) {
+    return await this.prisma.lessons.findMany({
+      where: {
+        coursesId,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} lesson`;
+  findOne(id: string) {
+    try {
+      return this.prisma.lessons.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (e) {
+      throw new BadRequestException('Cannot find lesson');
+    }
   }
 
-  update(id: number, updateLessonDto: UpdateLessonDto) {
-    return `This action updates a #${id} lesson`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} lesson`;
+  remove(id: string, userId: string) {
+    try {
+      return this.prisma.lessons.delete({
+        where: {
+          teacher: {
+            userId,
+          },
+          id,
+        },
+      });
+    } catch (e) {
+      throw new BadRequestException('Cannot delete lesson');
+    }
   }
 }

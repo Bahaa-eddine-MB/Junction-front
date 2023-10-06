@@ -1,34 +1,48 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  UsePipes,
+  Request,
+  Query,
+} from '@nestjs/common';
 import { LessonsService } from './lessons.service';
-import { CreateLessonDto } from './dto/create-lesson.dto';
-import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { lessonSchema, lessonDto } from './dto/lesson.dto';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
+import { AuthGuard } from '../auth/auth.guard';
+import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
+import { AuthRequest } from 'src/interfaces/request';
 
 @Controller('lessons')
+@UseGuards(AuthGuard)
 export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
   @Post()
-  create(@Body() createLessonDto: CreateLessonDto) {
-    return this.lessonsService.create(createLessonDto);
+  @AllowedRoles('TEACHER')
+  @UsePipes(new ZodValidationPipe(lessonSchema))
+  create(@Body() createLessonDto: lessonDto, @Request() request: AuthRequest) {
+    return this.lessonsService.create(createLessonDto, request.user.id);
   }
 
   @Get()
-  findAll() {
-    return this.lessonsService.findAll();
+  findAll(@Query('courseId') courseId: string) {
+    return this.lessonsService.findAll(courseId);
   }
 
   @Get(':id')
+  @AllowedRoles('ALL')
   findOne(@Param('id') id: string) {
-    return this.lessonsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonsService.update(+id, updateLessonDto);
+    return this.lessonsService.findOne(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.lessonsService.remove(+id);
+  @AllowedRoles('ADMIN')
+  async remove(@Param('id') id: string, @Request() request: AuthRequest) {
+    return await this.lessonsService.remove(id, request.user.id);
   }
 }
