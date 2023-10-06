@@ -1,4 +1,8 @@
-import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard as AuthGuardPassport } from '@nestjs/passport';
 import { UserRoles } from '@prisma/client';
@@ -30,13 +34,22 @@ export class AuthGuard extends AuthGuardPassport('jwt') {
       const user = request.user;
       if (!user) throw new UnauthorizedException();
       if (!user.isVerified) {
-        throw new UnauthorizedException(
-          'Unauthorized please verify your email',
-        );
+        throw new ForbiddenException('Unauthorized please verify your email');
       }
       if (user.role === 'ADMIN') return true;
+
       if (roles && !roles.includes(user.role))
         throw new UnauthorizedException('User Unauthorize');
+      if (user.role === 'STUDENT') {
+        const student = await this.prisma.student.findUnique({
+          where: {
+            userId: user.id,
+          },
+        });
+        if (!student.isActivated) {
+          throw new ForbiddenException('Unauthorized please activate account');
+        }
+      }
       return true;
     } catch (e) {
       throw new UnauthorizedException('User Unauthorize');

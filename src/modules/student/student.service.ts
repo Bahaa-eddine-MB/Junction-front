@@ -11,7 +11,7 @@ export class StudentService {
   ) {}
 
   async register(body: createStudentDto) {
-    const credentials = this.authService.register(
+    const credentials = await this.authService.register(
       {
         email: body.email,
         password: body.password,
@@ -21,5 +21,28 @@ export class StudentService {
       },
       false,
     );
+
+    return await this.prisma.student.create({
+      data: {
+        age: body.age,
+        isAdult: body.isAdult,
+        isActivated: false,
+        user: {
+          connect: {
+            id: credentials.user.id,
+          },
+        },
+        path: {
+          connect: {
+            id: body.pathId,
+          },
+        },
+        plan: {
+          connect: {
+            id: body.planId,
+          },
+        },
+      },
+    });
   }
 }

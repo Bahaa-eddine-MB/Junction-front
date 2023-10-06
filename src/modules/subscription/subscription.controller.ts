@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UsePipes,
+  UseGuards,
+} from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
-import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
+import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
+import { SubscriptionDto, subscriptionSchema } from './dto/subscription.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
 
+@UseGuards(AuthGuard)
 @Controller('subscription')
+@UsePipes(new ZodValidationPipe(subscriptionSchema))
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
   @Post()
-  create(@Body() createSubscriptionDto: CreateSubscriptionDto) {
-    return this.subscriptionService.create(createSubscriptionDto);
+  @AllowedRoles('STUDENT')
+  @UsePipes(new ZodValidationPipe(subscriptionSchema))
+  async Subscribe(@Body() body: SubscriptionDto) {
+    return this.subscriptionService.subscription(body);
   }
 
   @Get()
-  findAll() {
-    return this.subscriptionService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subscriptionService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubscriptionDto: UpdateSubscriptionDto) {
-    return this.subscriptionService.update(+id, updateSubscriptionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subscriptionService.remove(+id);
+  @AllowedRoles('ADMIN')
+  async getSubscriptions() {
+    this.subscriptionService.getSubscriptions();
   }
 }

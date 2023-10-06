@@ -11,6 +11,7 @@ export const StudentDto = z.object({
   age: z.number(),
   isAdult: z.nativeEnum(UserAge),
   pathId: z.string().uuid(),
+  planId: z.string().uuid(),
 });
 
 export const createStudentSchema = z.intersection(createUserSchema, StudentDto);

@@ -18,6 +18,7 @@ import { PathModule } from './modules/path/path.module';
 import { FieldModule } from './modules/field/field.module';
 import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { ArticlesModule } from './modules/articles/articles.module';
 @Module({
   imports: [
     PrismaModule,
@@ -40,6 +41,7 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     FieldModule,
     SubscriptionModule,
     ReviewsModule,
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
