@@ -7,6 +7,7 @@ import Image from "next/image";
 import logo from "@/images/logo.png";
 import login from "@/images/login.png";
 import { TypeAnimation } from "react-type-animation";
+import { useRouter } from "next/navigation";
 
 const schema = yup.object({
   email: yup
@@ -19,6 +20,8 @@ const schema = yup.object({
 type LoginForm = yup.InferType<typeof schema>;
 
 export default function Login() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -53,8 +56,7 @@ export default function Login() {
             <TypeAnimation
               sequence={[
                 ">> HELLO WORLD !!!", // Types 'One'
-                1000, 
-                
+                1000,
               ]}
               wrapper="div"
               cursor={false}
@@ -63,7 +65,7 @@ export default function Login() {
             <TypeAnimation
               sequence={[
                 ">> LEARN !!!", // Types 'One'
-                1000, 
+                1000,
               ]}
               wrapper="div"
               cursor={false}
@@ -72,13 +74,12 @@ export default function Login() {
             <TypeAnimation
               sequence={[
                 ">> GROW !!", // Types 'One'
-                1000, 
+                1000,
               ]}
               wrapper="div"
               cursor={false}
               repeat={Infinity}
             />
-
           </div>
         </div>
         <form
@@ -124,7 +125,12 @@ export default function Login() {
             Forgot password
           </span>
           <div className="px-8 flex justify-between pt-28">
-            <span className="self-center hover:cursor-pointer text-primaryColor underline">
+            <span
+              onClick={() => {
+                router.push("register");
+              }}
+              className="self-center hover:cursor-pointer text-primaryColor underline"
+            >
               Create account
             </span>
             <Button className="px-14">Login</Button>

@@ -32,7 +32,7 @@ const Input = ({
           <input
             type={(!isHidden && password) ? "password" : "text"}
             {...inputProps}
-            className={`focus:outline-none px-4 bg-transparent disabled:text-thirdColor placeholder-text-secondaryColor placeholder-opacity-60 grow w-full ${
+            className={`focus:outline-none   px-4 bg-transparent disabled:text-thirdColor placeholder-text-secondaryColor placeholder-opacity-60 grow w-full ${
               error
                 ? "text-mainRed caret-mainRed"
                 : "text-secondaryColor caret-secondaryColor"
@@ -54,7 +54,7 @@ const Input = ({
 
         <div className="pt-2">
           <div
-            className={`w-full border-[1px] ${
+            className={`w-full border-[1px]  group-focus-within:border-primaryColor ${
               !error ? "border-thirdColor" : "border-mainRed"
             }`}
           />
