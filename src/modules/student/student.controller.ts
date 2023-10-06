@@ -9,7 +9,12 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { CreateStudentDto, createUserDto } from './dto/create-student.dto';
+import {
+  CreateStudentDto,
+  createStudentDto,
+  createStudentSchema,
+  createUserDto,
+} from './dto/student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
 
@@ -18,8 +23,8 @@ export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 
   @Post('register')
-  @UsePipes(new ZodValidationPipe(CreateStudentDto))
-  register(@Body() body: createUserDto) {
+  @UsePipes(new ZodValidationPipe(createStudentSchema))
+  register(@Body() body: createStudentDto) {
     this.studentService.register(body);
   }
   @Get()

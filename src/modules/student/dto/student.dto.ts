@@ -13,5 +13,5 @@ export const StudentDto = z.object({
   pathId: z.string().uuid(),
 });
 
-const createStudentDto = z.intersection(createUserSchema, StudentDto);
-export type createStudentDto = z.infer<typeof createStudentDto>;
+export const createStudentSchema = z.intersection(createUserSchema, StudentDto);
+export type createStudentDto = z.infer<typeof createStudentSchema>;

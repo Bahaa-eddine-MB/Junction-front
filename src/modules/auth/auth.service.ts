@@ -100,6 +100,7 @@ export class AuthService {
         email: newUser.email,
         id: newUser.id,
         role: newUser.role,
+        isVerified: newUser.isVerified,
       };
       const accessToken = await this.jwt.signAsync(
         {
@@ -148,6 +149,7 @@ export class AuthService {
       email: existUser.email,
       id: existUser.id,
       role: existUser.role,
+      isVerified: existUser.isVerified,
     };
     const accessToken = await this.jwt.signAsync(
       {

@@ -10,15 +10,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { EmailModule } from './modules/email/email.module';
 import { AdminModule } from './modules/admin/admin.module';
-import { RatingModule } from './modules/rating/rating.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
 import { StudentModule } from './modules/student/student.module';
 import { PlanModule } from './modules/plan/plan.module';
 import { QaModule } from './modules/materials/moules/qa/qa.module';
-import { PathModule } from './modules/field/modules/path/path.module';
 import { PathModule } from './modules/path/path.module';
 import { FieldModule } from './modules/field/field.module';
 import { SubscriptionModule } from './modules/subscription/subscription.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 @Module({
   imports: [
     PrismaModule,
@@ -33,7 +32,6 @@ import { SubscriptionModule } from './modules/subscription/subscription.module';
     }),
     EmailModule,
     AdminModule,
-    RatingModule,
     TeacherModule,
     StudentModule,
     PlanModule,
@@ -41,6 +39,7 @@ import { SubscriptionModule } from './modules/subscription/subscription.module';
     PathModule,
     FieldModule,
     SubscriptionModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

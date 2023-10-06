@@ -14,6 +14,7 @@ enum UserRoles {
   ADMIN
   TEACHER
   STUDENT
+  ALL
 }
 
 enum UserAge {
@@ -117,6 +118,7 @@ model Courses {
   teacher    Teacher      @relation(fields: [teacherId], references: [id])
   teacherId  String       @db.Uuid
   image      String
+  reviews    Review[]
   materials  Materials[]
   answers    Answers[]
   homeworks  Homework[]
@@ -239,6 +241,24 @@ model Otp {
   otp       String   @unique
   user      User     @relation(fields: [userEmail], references: [email])
   userEmail String   @unique
+}
+
+model Payment {
+  id   String @id @db.Uuid
+  name String @db.Uuid
+  ibn  String
+}
+
+model Tracking {
+  id String @id @db.Uuid
+}
+
+model Review {
+  id        String   @id @default(uuid()) @db.Uuid
+  rate      Int      @db.SmallInt
+  comment   String   @db.VarBit(120)
+  courses   Courses? @relation(fields: [coursesId], references: [id])
+  coursesId String?  @db.Uuid
 }
 
 // ! end declare Plans 

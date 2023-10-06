@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { TeacherSchema, teacherDto } from './dto/teacher.dto';
@@ -15,6 +16,7 @@ import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AllowedRoles } from 'src/decorators/roles.decorator';
 import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
+import { optionsDto } from 'src/dto/options';
 
 @UseGuards(AuthGuard)
 @Controller('teacher')
@@ -28,10 +30,10 @@ export class TeacherController {
   }
 
   @Get()
-  findAll() {
-    return this.teacherService.findAll();
+  findAll(@Query() query?: optionsDto) {
+    return this.teacherService.findAll(query);
   }
-
+  @AllowedRoles('TEACHER')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.teacherService.findOne(+id);
@@ -39,11 +41,12 @@ export class TeacherController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto) {
-    return this.teacherService.update(+id, updateTeacherDto);
+    return this.teacherService.update(id, updateTeacherDto);
   }
 
+  @AllowedRoles('ADMIN')
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.teacherService.remove(+id);
+    return this.teacherService.remove(id);
   }
 }
