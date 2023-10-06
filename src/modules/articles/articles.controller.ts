@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Request,
   UseGuards,
@@ -11,6 +12,7 @@ import { AuthRequest } from 'src/interfaces/request';
 import { AuthGuard } from '../auth/auth.guard';
 import { ArticleDto, ArticleSchema } from './dto/articles.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
 
 @Controller('articles')
 @UseGuards(AuthGuard)
@@ -24,5 +26,11 @@ export class ArticlesController {
     @Body() body: ArticleDto,
   ) {
     return await this.articlesService.createArticle(request.user.id, body);
+  }
+
+  @Get()
+  @AllowedRoles('STUDENT')
+  getArticlesByStudent(@Request() request: AuthRequest) {
+    this.articlesService.getStudentArticles(request.user.id);
   }
 }

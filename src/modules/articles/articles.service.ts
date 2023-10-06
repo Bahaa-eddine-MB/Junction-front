@@ -38,4 +38,29 @@ export class ArticlesService {
       throw new BadRequestException('User not found');
     }
   }
+
+  async getStudentArticles(userId: string) {
+    try {
+      const studentField = await this.prisma.student.findUnique({
+        where: {
+          userId,
+        },
+        select: {
+          path: {
+            select: {
+              fieldId: true,
+            },
+          },
+        },
+      });
+      return this.prisma.articles.findMany({
+        where: {
+          fieldId: studentField.path.fieldId,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw new BadRequestException('Error fetching articles');
+    }
+  }
 }
