@@ -6,40 +6,54 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseGuards,
+  Put,
 } from '@nestjs/common';
 import { HomeworkService } from './homework.service';
-import { CreateHomeworkDto } from './dto/homework.dto';
-import { UpdateHomeworkDto } from './dto/update-homework.dto';
+import { homeWorkDto } from './dto/homework.dto';
+import { AuthRequest } from 'src/interfaces/request';
+import { AuthGuard } from '../auth/auth.guard';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
 
 @Controller('homework')
+@UseGuards(AuthGuard)
 export class HomeworkController {
   constructor(private readonly homeworkService: HomeworkService) {}
 
   @Post()
-  create(@Body() createHomeworkDto: CreateHomeworkDto) {
-    return this.homeworkService.create(createHomeworkDto);
+  @AllowedRoles('TEACHER')
+  create(
+    @Request() request: AuthRequest,
+    @Body() createHomeworkDto: homeWorkDto,
+  ) {
+    return this.homeworkService.create(request.user.id, createHomeworkDto);
   }
 
   @Get()
-  findAll() {
-    return this.homeworkService.findAll();
+  @AllowedRoles('TEACHER')
+  findAll(@Request() request: AuthRequest) {
+    return this.homeworkService.findAllByTeacher(request.user.id);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.homeworkService.findOne(+id);
+    return this.homeworkService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @AllowedRoles('TEACHER')
   update(
     @Param('id') id: string,
-    @Body() updateHomeworkDto: UpdateHomeworkDto,
+    @Request() request: AuthRequest,
+    @Body() updateHomeworkDto: homeWorkDto,
   ) {
-    return this.homeworkService.update(+id, updateHomeworkDto);
+    return this.homeworkService.update(id, request.user.id, updateHomeworkDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.homeworkService.remove(+id);
+  @AllowedRoles('TEACHER')
+  remove(@Param('id') id: string, @Request() request: AuthRequest) {
+    return this.homeworkService.remove(id, request.user.id);
   }
 }

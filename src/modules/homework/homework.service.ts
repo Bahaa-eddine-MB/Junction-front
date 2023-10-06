@@ -37,14 +37,33 @@ export class HomeworkService {
     }
   }
 
-  findAllByTeacher() {
-    return this.prisma.homework.findMany({
-      where: {},
-    });
+  async findAllByTeacher(userId: string) {
+    try {
+      const teacher = await this.prisma.teacher.findUnique({
+        where: {
+          userId,
+        },
+        select: {
+          id: true,
+        },
+      });
+      return await this.prisma.homework.findMany({
+        where: {
+          teacherId: teacher.id,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw new BadRequestException('Cannot find homework');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} homework`;
+  findOne(id: string) {
+    return this.prisma.homework.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
   async update(id: string, userId: string, body: homeWorkDto) {
