@@ -18,6 +18,7 @@ import { QaModule } from './modules/materials/moules/qa/qa.module';
 import { PathModule } from './modules/field/modules/path/path.module';
 import { PathModule } from './modules/path/path.module';
 import { FieldModule } from './modules/field/field.module';
+import { SubscriptionModule } from './modules/subscription/subscription.module';
 @Module({
   imports: [
     PrismaModule,
@@ -39,6 +40,7 @@ import { FieldModule } from './modules/field/field.module';
     QaModule,
     PathModule,
     FieldModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

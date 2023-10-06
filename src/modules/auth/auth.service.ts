@@ -122,6 +122,7 @@ export class AuthService {
       return {
         accessToken,
         refreshToken,
+        user: newUser,
       };
     } catch (e) {
       console.log(e);

@@ -1,14 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 import { TeacherService } from './teacher.service';
-import { CreateTeacherDto } from './dto/create-teacher.dto';
+import { TeacherSchema, teacherDto } from './dto/teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
+import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
 
+@UseGuards(AuthGuard)
 @Controller('teacher')
 export class TeacherController {
   constructor(private readonly teacherService: TeacherService) {}
-
   @Post()
-  create(@Body() createTeacherDto: CreateTeacherDto) {
+  @AllowedRoles('ADMIN')
+  @UsePipes(new ZodValidationPipe(TeacherSchema))
+  create(@Body() createTeacherDto: teacherDto) {
     return this.teacherService.create(createTeacherDto);
   }
 
