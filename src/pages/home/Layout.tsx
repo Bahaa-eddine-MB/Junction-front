@@ -37,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [isSideBarOpen]);
 
   return (
-    <div className="container mx-auto min-h-screen font-poppins  bg-gradient-to-r from-white via-thirdColor to-purple-50">
+    <div className="container mx-auto min-h-screen font-poppins bg-opacity-40 bg-gradient-to-r from-white via-thirdColor to-purple-50">
       <NavBar openSideBar={openSideBar} />
       <SideBar
         isOpen={isSideBarOpen}
