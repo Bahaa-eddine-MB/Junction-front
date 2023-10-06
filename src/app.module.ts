@@ -19,6 +19,7 @@ import { FieldModule } from './modules/field/field.module';
 import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { ArticlesModule } from './modules/articles/articles.module';
+import { TasksModule } from './modules/tasks/tasks.module';
 @Module({
   imports: [
     PrismaModule,
@@ -42,6 +43,7 @@ import { ArticlesModule } from './modules/articles/articles.module';
     SubscriptionModule,
     ReviewsModule,
     ArticlesModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

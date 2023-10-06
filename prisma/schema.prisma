@@ -49,6 +49,7 @@ model User {
   verifyToken  String?     @unique
   accessToken  String?
   refreshToken String?
+  lastLogin    DateTime?
   teacher      Teacher?    @relation("teacher")
   student      Student?    @relation("student")
   Questions    Questions[]
@@ -90,6 +91,7 @@ model Student {
   pathId      String      @db.Uuid
   isActivated Boolean     @default(false)
   Enrollment  Enrollment? @relation("enrollment")
+  Review      Review[]
 
   @@index([userId], name: "student_userId")
 }
@@ -271,7 +273,9 @@ model Review {
   id        String   @id @default(uuid()) @db.Uuid
   rate      Int      @db.SmallInt
   comment   String   @db.VarBit(120)
-  courses   Courses? @relation(fields: [coursesId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String   @db.Uuid
+  courses   Courses? @relation(fields: [coursesId], references: [id], onDelete: Cascade)
   coursesId String?  @db.Uuid
 }
 

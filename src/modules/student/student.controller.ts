@@ -7,16 +7,13 @@ import {
   Param,
   Delete,
   UsePipes,
+  Request,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
-import {
-  CreateStudentDto,
-  createStudentDto,
-  createStudentSchema,
-  createUserDto,
-} from './dto/student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
+import { createStudentDto, createStudentSchema } from './dto/student.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
+import { AllowedRoles } from 'src/decorators/roles.decorator';
+import { AuthRequest } from 'src/interfaces/request';
 
 @Controller('student')
 export class StudentController {
@@ -28,22 +25,25 @@ export class StudentController {
     this.studentService.register(body);
   }
   @Get()
-  findAll() {
-    return this.studentService.findAll();
+  getAllStudent() {
+    return this.studentService.getAllStudents();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.studentService.findOne(+id);
+    return this.studentService.getStudentProfile(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentService.update(+id, updateStudentDto);
+  @AllowedRoles('STUDENT')
+  @UsePipes(new ZodValidationPipe(createStudentSchema))
+  update(@Request() request: AuthRequest, @Body() body: createStudentDto) {
+    return this.studentService.update(request.user.id, body);
   }
 
   @Delete(':id')
+  @AllowedRoles('ADMIN')
   remove(@Param('id') id: string) {
-    return this.studentService.remove(+id);
+    return this.studentService.remove(id);
   }
 }
