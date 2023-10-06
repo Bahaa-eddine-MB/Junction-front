@@ -15,6 +15,7 @@ import { EmailService } from '../email/email.service';
 import { safeEmail } from 'src/helpers/email-safe';
 import { frontUrl } from 'src/config/front';
 import { randomBytes } from 'crypto';
+import { UserRoles } from '@prisma/client';
 @Injectable()
 export class AuthService {
   constructor(
@@ -94,7 +95,34 @@ export class AuthService {
       });
 
       const { password: _, ...user } = newUser;
-      return user;
+      const payload = {
+        sub: newUser.id,
+        email: newUser.email,
+        id: newUser.id,
+        role: newUser.role,
+      };
+      const accessToken = await this.jwt.signAsync(
+        {
+          ...payload,
+          exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
+        },
+        {
+          expiresIn: '1h',
+        },
+      );
+      const refreshToken = await this.jwt.signAsync(
+        {
+          ...payload,
+          exp: Date.now() + 1000 * 60 * 60 * 24 * 30,
+        },
+        {
+          expiresIn: '30d',
+        },
+      );
+      return {
+        accessToken,
+        refreshToken,
+      };
     } catch (e) {
       console.log(e);
       throw new BadRequestException("Can't create user");
@@ -118,15 +146,26 @@ export class AuthService {
       sub: existUser.id,
       email: existUser.email,
       id: existUser.id,
+      role: existUser.role,
     };
-    const accessToken = await this.jwt.signAsync({
-      ...payload,
-      exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
-    });
-    const refreshToken = await this.jwt.signAsync({
-      ...payload,
-      exp: Date.now() + 1000 * 60 * 60 * 24 * 30,
-    });
+    const accessToken = await this.jwt.signAsync(
+      {
+        ...payload,
+        exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
+      },
+      {
+        expiresIn: '1h',
+      },
+    );
+    const refreshToken = await this.jwt.signAsync(
+      {
+        ...payload,
+        exp: Date.now() + 1000 * 60 * 60 * 24 * 30,
+      },
+      {
+        expiresIn: '30d',
+      },
+    );
     return {
       accessToken,
       refreshToken,
@@ -152,11 +191,18 @@ export class AuthService {
       },
     });
     if (user.isVerified) throw new ConflictException('User already verified');
-    const token = this.jwt.sign({
-      sub: user.id,
-      email: user.email,
-      exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
-    });
+    const code = randomBytes(4).toString('hex');
+    const token = this.jwt.sign(
+      {
+        sub: user.id,
+        email: user.email,
+        code,
+        exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
+      },
+      {
+        expiresIn: '1h',
+      },
+    );
     const verifyUrl = `${frontUrl}/verify?token=${token}`;
 
     await this.prisma.user.update({

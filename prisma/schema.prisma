@@ -69,14 +69,15 @@ model Teacher {
 // ! Student  model 
 
 model Student {
-  id      String  @id @default(uuid()) @db.Uuid
-  user    User    @relation(fields: [userId], references: [id])
-  age     Int
-  isAdult UserAge
-
+  id          String       @id @default(uuid()) @db.Uuid
+  user        User         @relation(fields: [userId], references: [id])
+  age         Int
+  isAdult     UserAge
   plan        Plan         @relation(fields: [planId], references: [id])
   planId      String       @db.Uuid
   userId      String       @db.Uuid
+  path        Path         @relation(fields: [pathId], references: [id])
+  pathId      String       @db.Uuid
   isActivated Boolean      @default(false)
   Enrollment  Enrollment[]
 }
@@ -96,8 +97,8 @@ model Path {
   createdAt DateTime  @default(now())
   field     Field     @relation(fields: [fieldId], references: [id])
   fieldId   String    @db.Uuid
-  Courses   Courses[]
-  coursesId String?   @db.Uuid
+  courses   Courses[]
+  student   Student[]
 }
 
 model Courses {
@@ -124,6 +125,8 @@ model Materials {
   createdAt DateTime @default(now())
   courses   Courses  @relation(fields: [coursesId], references: [id])
   coursesId String   @db.Uuid
+
+  @@index([coursesId], name: "material_courses")
 }
 
 model Homework {
@@ -133,6 +136,8 @@ model Homework {
   createdAt DateTime @default(now())
   courses   Courses  @relation(fields: [coursesId], references: [id])
   coursesId String   @db.Uuid
+
+  @@index([coursesId], name: "homework_courses")
 }
 
 model Answers {
@@ -179,6 +184,8 @@ model Evaluation {
   coursesId String  @db.Uuid
   score     Float
   userId    String  @db.Uuid
+
+  @@index([coursesId], name: "evaluation_courses")
 }
 
 model Quiz {
@@ -210,10 +217,12 @@ model Enrollment {
   startDate DateTime
   endDate   DateTime
   student   Student  @relation(fields: [studentId], references: [id])
-  studentId String
+  studentId String   @db.Uuid
   plan      Plan     @relation(fields: [planId], references: [id])
-  planId    String
+  planId    String   @db.Uuid
   // Add other enrollment-related fields as needed
+
+  @@index([studentId], name: "studentId")
 }
 
 model Otp {

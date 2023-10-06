@@ -1,7 +1,8 @@
 import { UserAge, UserRoles } from '@prisma/client';
 import { z } from 'zod';
+import { createUserSchema } from '../../auth/dto/auth.dto';
 
-export const CreateStudentDto = z.object({
+export const StudentDto = z.object({
   email: z.string().email(),
   password: z.string(),
   firstName: z.string(),
@@ -9,6 +10,8 @@ export const CreateStudentDto = z.object({
   role: z.nativeEnum(UserRoles),
   age: z.number(),
   isAdult: z.nativeEnum(UserAge),
+  pathId: z.string().uuid(),
 });
 
-export type createUserDto = z.infer<typeof CreateStudentDto>;
+const createStudentDto = z.union([createUserSchema, StudentDto]);
+export type createStudentDto = z.infer<typeof createStudentDto>;

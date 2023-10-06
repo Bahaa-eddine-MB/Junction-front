@@ -19,10 +19,9 @@ export class TokenCookieInterceptor implements NestInterceptor {
           const accessToken = data.accessToken;
           const refreshToken = data.refreshToken;
           response.setHeader('Authorization', `Bearer ${accessToken}`);
-          response.cookie('refreshToken', refreshToken);
-          response.cookie('accessToken', accessToken, {
-            httpOnly: true,
+          response.cookie('refreshToken', refreshToken, {
             expires: new Date(Date.now() + 86400),
+            httpOnly: true,
           });
         }
       }),

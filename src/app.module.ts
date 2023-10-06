@@ -13,6 +13,11 @@ import { AdminModule } from './modules/admin/admin.module';
 import { RatingModule } from './modules/rating/rating.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
 import { StudentModule } from './modules/student/student.module';
+import { PlanModule } from './modules/plan/plan.module';
+import { QaModule } from './modules/materials/moules/qa/qa.module';
+import { PathModule } from './modules/field/modules/path/path.module';
+import { PathModule } from './modules/path/path.module';
+import { FieldModule } from './modules/field/field.module';
 @Module({
   imports: [
     PrismaModule,
@@ -30,6 +35,10 @@ import { StudentModule } from './modules/student/student.module';
     RatingModule,
     TeacherModule,
     StudentModule,
+    PlanModule,
+    QaModule,
+    PathModule,
+    FieldModule,
   ],
   controllers: [AppController],
   providers: [AppService],
