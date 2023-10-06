@@ -127,7 +127,7 @@ export default function Login() {
           <div className="px-8 flex justify-between pt-28">
             <span
               onClick={() => {
-                router.push("register");
+                router.push("plans");
               }}
               className="self-center hover:cursor-pointer text-primaryColor underline"
             >
