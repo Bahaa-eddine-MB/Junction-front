@@ -38,21 +38,20 @@ enum PlanDuration {
 // End Declare enum
 
 model User {
-  id           String      @id @default(uuid()) @db.Uuid
-  email        String      @unique @db.VarChar(60)
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique @db.VarChar(60)
   password     String
-  firstName    String      @db.VarChar(60)
-  lastName     String      @db.VarChar(60)
+  firstName    String    @db.VarChar(60)
+  lastName     String    @db.VarChar(60)
   role         UserRoles
-  createdAt    DateTime    @default(now())
-  isVerified   Boolean     @default(false)
-  verifyToken  String?     @unique
+  createdAt    DateTime  @default(now())
+  isVerified   Boolean   @default(false)
+  verifyToken  String?   @unique
   accessToken  String?
   refreshToken String?
   lastLogin    DateTime?
-  teacher      Teacher?    @relation("teacher")
-  student      Student?    @relation("student")
-  Questions    Questions[]
+  teacher      Teacher?  @relation("teacher")
+  student      Student?  @relation("student")
   Otp          Otp[]
 
   // @@unique([id, email], name: "students")
@@ -74,6 +73,7 @@ model Teacher {
   field      Field      @relation(fields: [fieldId], references: [id])
   fieldId    String     @db.Uuid
   Articles   Articles[]
+  Homework   Homework[]
 }
 
 // ! Teacher model 
@@ -92,7 +92,7 @@ model Student {
   isActivated Boolean     @default(false)
   Enrollment  Enrollment? @relation("enrollment")
   Review      Review[]
-  Grade       Grade[]
+  Questions   Questions[]
 
   @@index([userId], name: "student_userId")
 }
@@ -122,7 +122,8 @@ model Path {
 
 model Courses {
   id         String       @id @default(uuid()) @db.Uuid
-  name       String       @unique @db.VarChar(60)
+  title      String       @db.VarChar(60)
+  desc       String       @db.VarChar(200)
   createdAt  DateTime     @default(now())
   path       Path         @relation(fields: [pathId], references: [id])
   pathId     String       @db.Uuid
@@ -137,15 +138,13 @@ model Courses {
   exam       Exam[]
   evaluation Evaluation[]
   lessons    Lessons[]
-  Grade      Grade[]
 }
 
 model Materials {
   id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique @db.VarChar(60)
-  url       String
+  title     String   @unique @db.VarChar(60)
   createdAt DateTime @default(now())
-  courses   Courses  @relation(fields: [coursesId], references: [id])
+  courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
   coursesId String   @db.Uuid
 
   @@index([coursesId], name: "material_courses")
@@ -153,8 +152,10 @@ model Materials {
 
 model Homework {
   id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique @db.VarChar(60)
+  title     String   @unique @db.VarChar(60)
   desc      String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String   @db.Uuid
   createdAt DateTime @default(now())
   courses   Courses  @relation(fields: [coursesId], references: [id])
   coursesId String   @db.Uuid
@@ -164,9 +165,9 @@ model Homework {
 
 model Answers {
   id        String   @id @default(uuid()) @db.Uuid
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String   @db.Uuid
-  courses   Courses  @relation(fields: [coursesId], references: [id])
+  courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
   coursesId String   @db.Uuid
   text      String   @db.Text
   createdAt DateTime @default(now())
@@ -179,7 +180,7 @@ model Lessons {
   name      String   @unique @db.VarChar(60)
   url       String
   createdAt DateTime @default(now())
-  courses   Courses  @relation(fields: [coursesId], references: [id])
+  courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
   coursesId String   @db.Uuid
 }
 
@@ -187,10 +188,10 @@ model Questions {
   id        String   @id @default(uuid()) @db.Uuid
   text      String   @db.Text
   createdAt DateTime @default(now())
-  courses   Courses  @relation(fields: [coursesId], references: [id])
+  courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
   coursesId String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.Uuid
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String   @db.Uuid
 }
 
 model Exam {
@@ -272,22 +273,13 @@ model Tracking {
 }
 
 model Review {
-  id        String   @id @default(uuid()) @db.Uuid
-  rate      Int      @db.SmallInt
-  comment   String   @db.VarBit(120)
-  student   Student  @relation(fields: [studentId], references: [id])
-  studentId String   @db.Uuid
-  courses   Courses? @relation(fields: [coursesId], references: [id], onDelete: Cascade)
-  coursesId String?  @db.Uuid
-}
-
-model Grade {
   id        String  @id @default(uuid()) @db.Uuid
-  value     Float
-  course    Courses @relation(fields: [coursesId], references: [id])
-  coursesId String  @db.Uuid
+  rate      Int     @db.SmallInt
+  comment   String  @db.VarBit(120)
   student   Student @relation(fields: [studentId], references: [id])
   studentId String  @db.Uuid
+  courses   Courses @relation(fields: [coursesId], references: [id], onDelete: Cascade)
+  coursesId String  @db.Uuid
 }
 
 model Articles {

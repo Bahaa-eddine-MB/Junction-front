@@ -13,16 +13,15 @@ import { AdminModule } from './modules/admin/admin.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
 import { StudentModule } from './modules/student/student.module';
 import { PlanModule } from './modules/plan/plan.module';
-import { QaModule } from './modules/materials/moules/qa/qa.module';
 import { PathModule } from './modules/path/path.module';
 import { FieldModule } from './modules/field/field.module';
 import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { TasksModule } from './modules/tasks/tasks.module';
-import { MaterialModule } from './modules/material/material.module';
 import { ExamModule } from './modules/exam/exam.module';
 import { MaterialModule } from './modules/material/material.module';
+import { QaModule } from './modules/qa/qa.module';
 @Module({
   imports: [
     PrismaModule,
@@ -40,7 +39,6 @@ import { MaterialModule } from './modules/material/material.module';
     TeacherModule,
     StudentModule,
     PlanModule,
-    QaModule,
     PathModule,
     FieldModule,
     SubscriptionModule,
@@ -49,6 +47,7 @@ import { MaterialModule } from './modules/material/material.module';
     TasksModule,
     MaterialModule,
     ExamModule,
+    QaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

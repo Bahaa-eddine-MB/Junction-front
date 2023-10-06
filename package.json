@@ -33,7 +33,6 @@
     "cors": "^2.8.5",
     "cron": "^3.0.0",
     "helmet": "^7.0.0",
-    "mem": "^9.0.2",
     "nodemailer": "^6.9.5",
     "normalize-email": "^1.1.1",
     "passport-jwt": "^4.0.1",

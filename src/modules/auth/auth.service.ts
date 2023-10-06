@@ -169,6 +169,14 @@ export class AuthService {
         expiresIn: '30d',
       },
     );
+    this.prisma.user.update({
+      where: {
+        id: existUser.id,
+      },
+      data: {
+        lastLogin: new Date(),
+      },
+    });
     return {
       accessToken,
       refreshToken,
@@ -236,6 +244,48 @@ export class AuthService {
       };
     } catch (e) {
       throw new BadRequestException('Invalid token');
+    }
+  }
+
+  async getAccessToken(refreshToken: string, email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+        refreshToken: refreshToken,
+      },
+    });
+    if (user) {
+      const payload = {
+        sub: user.id,
+        email: user.email,
+        id: user.id,
+        role: user.role,
+        isVerified: user.isVerified,
+      };
+      const accessToken = await this.jwt.signAsync(
+        {
+          ...payload,
+          exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
+        },
+        {
+          expiresIn: '1h',
+        },
+      );
+      const refreshToken = await this.jwt.signAsync(
+        {
+          ...payload,
+          exp: Date.now() + 1000 * 60 * 60 * 24 * 30,
+        },
+        {
+          expiresIn: '30d',
+        },
+      );
+      return {
+        accessToken,
+        refreshToken,
+      };
+    } else {
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }
