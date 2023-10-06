@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
@@ -25,21 +26,18 @@ export class PlanController {
   }
 
   @Get()
-  findAll() {
+  getAll() {
     return this.planService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.planService.findOne(+id);
-  }
-
-  @Patch(':id')
+  @Put(':id')
+  @AllowedRoles('ADMIN')
   update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
     return this.planService.update(+id, updatePlanDto);
   }
 
   @Delete(':id')
+  @AllowedRoles('ADMIN')
   remove(@Param('id') id: string) {
     return this.planService.remove(+id);
   }

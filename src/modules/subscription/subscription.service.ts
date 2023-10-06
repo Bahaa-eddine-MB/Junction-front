@@ -47,7 +47,7 @@ export class SubscriptionService {
     });
     if (enroller) {
       const endDate = new Date(
-        enroller.endDate.getDay() + payment.plan.duration,
+        enroller.endDate.getTime() + payment.plan.duration * 24 * 3600 * 1000,
       );
       await this.prisma.enrollment.update({
         where: {
@@ -67,7 +67,9 @@ export class SubscriptionService {
       await this.prisma.enrollment.create({
         data: {
           startDate: new Date(),
-          endDate: new Date(new Date().getDay() + payment.plan.duration),
+          endDate: new Date(
+            new Date().getTime() + payment.plan.duration + 24 * 3600 * 1000,
+          ),
           plan: {
             connect: {
               id: payment.plan.id,

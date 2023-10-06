@@ -20,6 +20,9 @@ import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { MaterialModule } from './modules/material/material.module';
+import { ExamModule } from './modules/exam/exam.module';
+import { MaterialModule } from './modules/material/material.module';
 @Module({
   imports: [
     PrismaModule,
@@ -44,6 +47,8 @@ import { TasksModule } from './modules/tasks/tasks.module';
     ReviewsModule,
     ArticlesModule,
     TasksModule,
+    MaterialModule,
+    ExamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
