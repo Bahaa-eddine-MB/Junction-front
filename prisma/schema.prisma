@@ -1,0 +1,227 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRoles {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum UserAge {
+  ADULT
+  CHILDREN
+}
+
+// Declare enum 
+
+enum PlanType {
+  PREMIUM
+  GOLDEN
+  DIAMOND
+}
+
+enum PlanDuration {
+  MONTHLY
+  YEARLY
+}
+
+// End Declare enum
+
+model User {
+  id           String      @id @default(uuid()) @db.Uuid
+  email        String      @unique @db.VarChar(60)
+  password     String
+  firstName    String      @db.VarChar(60)
+  lastName     String      @db.VarChar(60)
+  role         UserRoles
+  createdAt    DateTime    @default(now())
+  isVerified   Boolean     @default(false)
+  verifyToken  String?     @unique
+  accessToken  String?
+  refreshToken String?
+  teacher      Teacher[]
+  student      Student[]
+  Questions    Questions[]
+  Otp          Otp[]
+}
+
+// ! Teacher model 
+model Teacher {
+  id         String    @id @default(uuid()) @db.Uuid
+  experience String    @db.VarChar(180)
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String    @db.Uuid
+  createdAt  DateTime  @default(now())
+  courses    Courses[]
+  Answers    Answers[]
+}
+
+// ! Teacher model 
+// ! Student  model 
+
+model Student {
+  id      String  @id @default(uuid()) @db.Uuid
+  user    User    @relation(fields: [userId], references: [id])
+  age     Int
+  isAdult UserAge
+
+  plan        Plan         @relation(fields: [planId], references: [id])
+  planId      String       @db.Uuid
+  userId      String       @db.Uuid
+  isActivated Boolean      @default(false)
+  Enrollment  Enrollment[]
+}
+
+// ! Student  model 
+// ! Start Learning Models
+model Field {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(60)
+  createdAt DateTime @default(now())
+  paths     Path[]
+}
+
+model Path {
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String    @unique @db.VarChar(60)
+  createdAt DateTime  @default(now())
+  field     Field     @relation(fields: [fieldId], references: [id])
+  fieldId   String    @db.Uuid
+  Courses   Courses[]
+  coursesId String?   @db.Uuid
+}
+
+model Courses {
+  id         String       @id @default(uuid()) @db.Uuid
+  name       String       @unique @db.VarChar(60)
+  createdAt  DateTime     @default(now())
+  path       Path         @relation(fields: [pathId], references: [id])
+  pathId     String       @db.Uuid
+  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacherId  String       @db.Uuid
+  materials  Materials[]
+  answers    Answers[]
+  homeworks  Homework[]
+  Questions  Questions[]
+  Exam       Exam[]
+  Evaluation Evaluation[]
+  Lessons    Lessons[]
+}
+
+model Materials {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(60)
+  url       String
+  createdAt DateTime @default(now())
+  courses   Courses  @relation(fields: [coursesId], references: [id])
+  coursesId String   @db.Uuid
+}
+
+model Homework {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(60)
+  url       String
+  createdAt DateTime @default(now())
+  courses   Courses  @relation(fields: [coursesId], references: [id])
+  coursesId String   @db.Uuid
+}
+
+model Answers {
+  id        String   @id @default(uuid()) @db.Uuid
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String   @db.Uuid
+  courses   Courses  @relation(fields: [coursesId], references: [id])
+  coursesId String   @db.Uuid
+  text      String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+// Lessons
+
+model Lessons {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(60)
+  url       String
+  createdAt DateTime @default(now())
+  courses   Courses  @relation(fields: [coursesId], references: [id])
+  coursesId String   @db.Uuid
+}
+
+model Questions {
+  id        String   @id @default(uuid()) @db.Uuid
+  text      String   @db.Text
+  createdAt DateTime @default(now())
+  courses   Courses  @relation(fields: [coursesId], references: [id])
+  coursesId String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.Uuid
+}
+
+model Exam {
+  id        String  @id @db.Uuid
+  quiz      Quiz[]
+  courses   Courses @relation(fields: [coursesId], references: [id])
+  coursesId String  @db.Uuid
+}
+
+model Evaluation {
+  id        String  @id @db.Uuid
+  courses   Courses @relation(fields: [coursesId], references: [id])
+  coursesId String  @db.Uuid
+  score     Float
+  userId    String  @db.Uuid
+}
+
+model Quiz {
+  id     String @id @db.Uuid
+  quiz1  String @db.VarChar(60)
+  quiz2  String @db.VarChar(60)
+  quiz3  String @db.VarChar(60)
+  answer Int    @db.SmallInt
+  Exam   Exam   @relation(fields: [examId], references: [id])
+  examId String @db.Uuid
+}
+
+// ! End Learning Models
+
+// ! Start declare Plans
+model Plan {
+  id         String       @id @default(uuid()) @db.Uuid
+  price      Float
+  planType   PlanType     @default(PREMIUM)
+  title      String       @db.VarChar(60)
+  desc       String       @db.Text
+  duration   String
+  users      Student[]
+  Enrollment Enrollment[]
+}
+
+model Enrollment {
+  id        String   @id @db.Uuid
+  startDate DateTime
+  endDate   DateTime
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  plan      Plan     @relation(fields: [planId], references: [id])
+  planId    String
+  // Add other enrollment-related fields as needed
+}
+
+model Otp {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+  otp       String   @unique
+  user      User     @relation(fields: [userEmail], references: [email])
+  userEmail String   @unique
+}
+
+// ! end declare Plans 
