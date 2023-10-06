@@ -120,14 +120,14 @@ export default function Login() {
               ...register("password"),
             }}
           />
-          <button className="text-primaryColor self-end">
+          <span className="hover:cursor-pointer text-primaryColor self-end">
             Forgot password
-          </button>
+          </span>
           <div className="px-8 flex justify-between pt-28">
-            <button className="text-primaryColor underline">
+            <span className="self-center hover:cursor-pointer text-primaryColor underline">
               Create account
-            </button>
-            <Button className="px-16">Login</Button>
+            </span>
+            <Button className="px-14">Login</Button>
           </div>
         </form>
       </main>
