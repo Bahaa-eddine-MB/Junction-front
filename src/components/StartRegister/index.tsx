@@ -16,6 +16,51 @@ import diamond from "@/images/diamond.png";
 import yes from "@/icons/yes.svg";
 import no from "@/icons/no.svg";
 
+
+const fieldsAndPrograms = [
+  {
+    title: "Cybersecurity",
+    description: "Description for Cybersecurity.",
+    programs: [
+      "Cybersecurity Analyst",
+      "Ethical Hacker",
+      "Security Engineer",
+      "Chief Information Security Officer (CISO)",
+    ],
+  },
+
+  {
+    title: "Artificial Intelligence (AI)",
+    description: "Description for Artificial Intelligence (AI).",
+    programs: [
+      "AI Research Scientist",
+      "Natural Language Processing (NLP) Engineer",
+      "Computer Vision Engineer",
+      "Robotics Engineer",
+    ],
+  },
+  {
+    title: "Embedded Systems",
+    description: "Description for Embedded Systems.",
+    programs: [
+      "Embedded Systems Engineer",
+      "Firmware Developer",
+      "IoT (Internet of Things) Specialist",
+      "Robotics Software Engineer",
+    ],
+  },
+  {
+    title: "Web Development",
+    description: "Description for Web Development.",
+    programs: [
+      "Web Designer",
+      "Web Developer",
+      "UI/UX Designer",
+      "Web Application Architect",
+    ],
+  },
+];
+
 const schema = yup.object().shape({
   firstname: yup.string().min(3).required("first name is required"),
   lastname: yup.string().min(3).required("Last name is required"),
@@ -75,138 +120,41 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
         </p>
 
         <div className="grid grid-cols-2 gap-8 px-32">
-          <div
-            onClick={() => setSelectedProgrmme("1")}
-            className={`flex flex-col gap-4 border-[1.5px] rounded-sm border-secondaryColor border-opacity-70 p-6 hover:cursor-pointer ${
-              selectedProgramme == "1"
-                ? "bg-secondaryColor bg-opacity-70 text-white"
-                : "text-secondaryColor text-opacity-70"
-            }`}
-          >
-            <div className="flex justify-between">
-              <p className="text-4xl font-bold  ">IOT</p>
+          {fieldsAndPrograms.map((field, index) => (
+            <div
+              key={index}
+              onClick={() => setSelectedProgrmme((index + 1).toString())}
+              className={`flex flex-col gap-4 border-[1.5px] rounded-sm border-secondaryColor border-opacity-70 p-6 hover:cursor-pointer ${
+                selectedProgramme == (index + 1).toString()
+                  ? "bg-secondaryColor bg-opacity-70 text-white"
+                  : "text-secondaryColor text-opacity-70"
+              }`}
+            >
+              <div className="flex justify-between">
+                <h2 className="text-4xl font-bold  ">{field.title}</h2>
 
-              <div
-                className={`border-2  rounded-full w-10 h-10 flex items-center justify-center ${
-                  selectedProgramme != "1"
-                    ? "border-secondaryColor border-opacity-70"
-                    : "border-white"
-                }`}
-              >
                 <div
-                  className={`${
-                    selectedProgramme != "1" && "hidden"
-                  } w-8 h-8  rounded-full p-2 bg-white`}
-                />
+                  className={`border-2  rounded-full w-10 h-10 flex items-center justify-center ${
+                    selectedProgramme != (index + 1).toString()
+                      ? "border-secondaryColor border-opacity-70"
+                      : "border-white"
+                  }`}
+                >
+                  <div
+                    className={`${
+                      selectedProgramme != (index + 1).toString() && "hidden"
+                    } w-8 h-8  rounded-full p-2 bg-white`}
+                  />
+                </div>
               </div>
+              <p className="text-sm">{field.description}</p>
+              <ul className="mt-2">
+                {field.programs.map((program, programIndex) => (
+                  <li key={programIndex}>{program}</li>
+                ))}
+              </ul>
             </div>
-
-            <p className="pl-2">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi est
-              temporibus eius suscipit labore ducimus deserunt quasi, facilis,
-              voluptatibus blanditiis nobis. Cumque eius modi porro nesciunt
-              atque pariatur at optio!
-            </p>
-          </div>
-          <div
-            onClick={() => setSelectedProgrmme("2")}
-            className={`flex flex-col gap-4 border-[1.5px] rounded-sm border-secondaryColor border-opacity-70 p-6 hover:cursor-pointer ${
-              selectedProgramme == "2"
-                ? "bg-secondaryColor bg-opacity-70 text-white"
-                : "text-secondaryColor text-opacity-70"
-            }`}
-          >
-            <div className="flex justify-between">
-              <p className="text-4xl font-bold  ">AI</p>
-
-              <div
-                className={`border-2  rounded-full w-10 h-10 flex items-center justify-center ${
-                  selectedProgramme != "2"
-                    ? "border-secondaryColor border-opacity-70"
-                    : "border-white"
-                }`}
-              >
-                <div
-                  className={`${
-                    selectedProgramme != "2" && "hidden"
-                  } w-8 h-8  rounded-full p-2 bg-white`}
-                />
-              </div>
-            </div>
-
-            <p className="pl-2">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi est
-              temporibus eius suscipit labore ducimus deserunt quasi, facilis,
-              voluptatibus blanditiis nobis. Cumque eius modi porro nesciunt
-              atque pariatur at optio!
-            </p>
-          </div>
-          <div
-            onClick={() => setSelectedProgrmme("3")}
-            className={`flex flex-col gap-4 border-[1.5px] rounded-sm border-secondaryColor border-opacity-70 p-6 hover:cursor-pointer ${
-              selectedProgramme == "3"
-                ? "bg-secondaryColor bg-opacity-70 text-white"
-                : "text-secondaryColor text-opacity-70"
-            }`}
-          >
-            <div className="flex justify-between">
-              <p className="text-4xl font-bold  ">Arduino</p>
-
-              <div
-                className={`border-2  rounded-full w-10 h-10 flex items-center justify-center ${
-                  selectedProgramme != "3"
-                    ? "border-secondaryColor border-opacity-70"
-                    : "border-white"
-                }`}
-              >
-                <div
-                  className={`${
-                    selectedProgramme != "3" && "hidden"
-                  } w-8 h-8  rounded-full p-2 bg-white`}
-                />
-              </div>
-            </div>
-
-            <p className="pl-2">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi est
-              temporibus eius suscipit labore ducimus deserunt quasi, facilis,
-              voluptatibus blanditiis nobis. Cumque eius modi porro nesciunt
-              atque pariatur at optio!
-            </p>
-          </div>
-          <div
-            onClick={() => setSelectedProgrmme("4")}
-            className={`flex flex-col gap-4 border-[1.5px] rounded-sm border-secondaryColor border-opacity-70 p-6 hover:cursor-pointer ${
-              selectedProgramme == "4"
-                ? "bg-secondaryColor bg-opacity-70 text-white"
-                : "text-secondaryColor text-opacity-70"
-            }`}
-          >
-            <div className="flex justify-between">
-              <p className="text-4xl font-bold  ">Robotics</p>
-
-              <div
-                className={`border-2  rounded-full w-10 h-10 flex items-center justify-center ${
-                  selectedProgramme != "4"
-                    ? "border-secondaryColor border-opacity-70"
-                    : "border-white"
-                }`}
-              >
-                <div
-                  className={`${
-                    selectedProgramme != "4" && "hidden"
-                  } w-8 h-8  rounded-full p-2 bg-white`}
-                />
-              </div>
-            </div>
-
-            <p className="pl-2">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi est
-              temporibus eius suscipit labore ducimus deserunt quasi, facilis,
-              voluptatibus blanditiis nobis. Cumque eius modi porro nesciunt
-              atque pariatur at optio!
-            </p>
-          </div>
+          ))}
         </div>
 
         <p className="text-4xl font-bold flex pt-16 px-24 text-secondaryColor pb-16">
@@ -329,7 +277,7 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
             </div>
           </div>
         </div>
-        {(selectedPlan !== "0" && selectedProgramme!=="0") && (
+        {selectedPlan !== "0" && selectedProgramme !== "0" && (
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-2 mx-20 mt-16  px-16 gap-8 py-14 bg-white rounded-md p-16"
