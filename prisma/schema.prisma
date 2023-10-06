@@ -85,8 +85,10 @@ model Student {
 // ! Student  model 
 // ! Start Learning Models
 model Field {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique @db.VarChar(60)
+  id   String @id @default(uuid()) @db.Uuid
+  name String @unique @db.VarChar(60)
+  desc String @unique @db.VarChar(200)
+
   createdAt DateTime @default(now())
   paths     Path[]
 }
@@ -94,6 +96,7 @@ model Field {
 model Path {
   id        String    @id @default(uuid()) @db.Uuid
   name      String    @unique @db.VarChar(60)
+  desc      String    @unique @db.VarChar(200)
   createdAt DateTime  @default(now())
   field     Field     @relation(fields: [fieldId], references: [id])
   fieldId   String    @db.Uuid

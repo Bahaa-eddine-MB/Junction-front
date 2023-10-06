@@ -14,6 +14,7 @@ export class PathService {
       this.prisma.path.create({
         data: {
           name: createPathDto.name,
+          desc: createPathDto.desc,
           field: {
             connect: {
               id: createPathDto.fieldId,
