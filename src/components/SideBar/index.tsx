@@ -21,7 +21,7 @@ const SideBar = ({
 
   const sidebarItems = [
     { icon: home, label: "Home", route: "/home" },
-    { icon: profile, label: "Profile", route: "/home/profile" },
+    { icon: profile, label: "Profile", route: "/home/my-profile" },
     { icon: achivement, label: "Achievements", route: "/home/achievements" },
     { icon: teacher, label: "Teachers", route: "/home/teachers" },
     { icon: sub, label: "Subscription", route: "/home/subscription" },
@@ -31,7 +31,7 @@ const SideBar = ({
   return (
     <div
       ref={sidebarRef}
-      className={`fixed inset-y-0 flex flex-col   left-0 w-[30vw] bg-secondaryColor border-r transform ${
+      className={`z-10 fixed inset-y-0 flex flex-col   left-0 w-[30vw] bg-secondaryColor border-r transform ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform ease-in-out duration-300`}
     >

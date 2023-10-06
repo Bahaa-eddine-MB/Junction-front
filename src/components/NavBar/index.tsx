@@ -7,7 +7,11 @@ import { useRouter } from "next/router";
 const NavBar = ({ openSideBar }: { openSideBar: () => void }) => {
   const route = useRouter()
   return (
-    <nav className="flex px-24 justify-between items-center pt-4">
+    <nav  style={{
+        position: "sticky",
+        top: 0, // Stick to the top of the viewport
+        zIndex: 10, // Optional: You can adjust the z-index as needed
+      }} className="flex px-24 justify-between items-center pt-4 bg-transparent backdrop-blur-md pb-2">
       <div onClick={() => openSideBar()} className="hover:cursor-pointer">
         <Image width={40} height={40} alt="menu" src={menu} />
       </div>

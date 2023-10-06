@@ -11,3 +11,11 @@
     margin: 0;
   }
 }
+
+.Portfolio-slider {
+  margin-top: 3rem;
+  width: 100%;
+}
+.Portfolio-slider .swipe-slide {
+  width: 50rem;
+}
