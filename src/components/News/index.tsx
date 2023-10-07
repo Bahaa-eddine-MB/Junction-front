@@ -7,7 +7,7 @@ import archi from "@/icons/archieve.png";
 
 const News = () => {
   return (
-    <div className="shadow-lg shadow-secondaryColor rounded-3xl bg-white flex  w-[50rem]">
+    <div className="drop-shadow-lg shadow-secondaryColor rounded-3xl bg-white flex  w-[50rem]">
       <Image src={news} alt="news" />
       <div className=" flex flex-col justify-center space-y-8 px-8 pt-24">
         <h2 className="text-secondaryColor font-bold text-3xl">

@@ -134,7 +134,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="pt-12 flex justify-between px-24">
-            <p className="text-secondaryColor font-bold text-xl">News</p>
+            <p className="text-secondaryColor font-bold text-3xl">News</p>
             <span className="text-primaryColor underline hover:cursor-pointer">
               see all
             </span>
@@ -208,7 +208,9 @@ const HomePage = () => {
               </p>
             </div>
           </div>
-          <span className="text-primaryColor underline flex justify-center py-8 text-2xl hover:cursor-pointer">see all</span>
+          <span className="text-primaryColor underline flex justify-center py-8 text-2xl hover:cursor-pointer">
+            see all
+          </span>
         </section>
       </Layout>
     </>
