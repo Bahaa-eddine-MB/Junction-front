@@ -165,13 +165,15 @@ model Homework {
 }
 
 model Answers {
-  id        String   @id @default(uuid()) @db.Uuid
-  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  teacherId String   @db.Uuid
-  courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
-  coursesId String   @db.Uuid
-  text      String   @db.Text
-  createdAt DateTime @default(now())
+  id          String    @id @default(uuid()) @db.Uuid
+  teacher     Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId   String    @db.Uuid
+  courses     Courses   @relation(fields: [coursesId], references: [id], onDelete: Cascade)
+  coursesId   String    @db.Uuid
+  question    Questions @relation(fields: [questionsId], references: [id])
+  text        String    @db.Text
+  createdAt   DateTime  @default(now())
+  questionsId String    @db.Uuid
 }
 
 // Lessons
@@ -188,13 +190,14 @@ model Lessons {
 }
 
 model Questions {
-  id        String   @id @default(uuid()) @db.Uuid
-  text      String   @db.Text
-  createdAt DateTime @default(now())
-  courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
-  coursesId String   @db.Uuid
-  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId String   @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
+  text      String    @db.Text
+  createdAt DateTime  @default(now())
+  courses   Courses   @relation(fields: [coursesId], references: [id], onDelete: Cascade)
+  coursesId String    @db.Uuid
+  student   Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String    @db.Uuid
+  answers   Answers[]
 }
 
 model Exam {

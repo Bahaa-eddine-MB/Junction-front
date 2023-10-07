@@ -22,12 +22,13 @@ export class FieldController {
   constructor(private readonly fieldService: FieldService) {}
 
   @Post()
+  @AllowedRoles('ADMIN')
   @UsePipes(new ZodValidationPipe(CreateFieldSchema))
   create(@Body() body: fieldDto) {
     return this.fieldService.create(body);
   }
 
-  @AllowedRoles('ADMIN', 'STUDENT', 'TEACHER')
+  @AllowedRoles('ALL')
   @Get()
   findAll() {
     return this.fieldService.findAll();
