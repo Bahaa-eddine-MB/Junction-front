@@ -8,7 +8,6 @@ export const createUserSchema = z.object({
   lastName: z.string(),
   role: z.nativeEnum(UserRoles),
 });
-
 export type createUserDto = z.infer<typeof createUserSchema>;
 
 export const loginSchema = z.object({
