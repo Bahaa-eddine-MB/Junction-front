@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { materialDto } from './dto/material.dto';
 
@@ -7,6 +7,9 @@ export class MaterialService {
   constructor(private readonly prisma: PrismaService) {}
   async createMaterial(body: materialDto, userId: string, filePath: string) {
     try {
+      if (!body.courseId) {
+        throw new BadRequestException('courseId is required');
+      }
       const teacher = await this.prisma.teacher.findUnique({
         where: {
           userId,
@@ -31,7 +34,7 @@ export class MaterialService {
         },
       });
     } catch (e) {
-      throw new BadRequestException("Can't create material");
+      throw new HttpException(e.message, e.status);
     }
   }
   async getMaterials(coursesId: string) {

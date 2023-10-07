@@ -40,13 +40,14 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post()
+  @Post('login')
+  @Public()
   @UseInterceptors(TokenCookieInterceptor)
   @UsePipes(new ZodValidationPipe(loginSchema))
   login(@Body() body: loginDto) {
     this.authService.login(body);
   }
-  @Post()
+  @Post('create')
   @AllowedRoles('ADMIN')
   @UsePipes(new ZodValidationPipe(createUserSchema))
   createByAdmin(@Body() body: createUserDto) {
@@ -94,5 +95,11 @@ export class AuthController {
     if (!query.email || query.token)
       throw new BadRequestException('Error when trying to get refresh token');
     this.authService.getAccessToken(query.token, query.email);
+  }
+  @Public()
+  @Post('register')
+  @UsePipes(new ZodValidationPipe(createUserSchema))
+  register(@Body() body: createUserDto) {
+    this.authService.register(body);
   }
 }

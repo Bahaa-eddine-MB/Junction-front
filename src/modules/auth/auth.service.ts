@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { createUserDto, loginDto } from './dto/auth.dto';
-import bycrypt, { hashSync } from 'bcrypt';
+import bycrypt, { compareSync, hashSync } from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '../email/email.service';
@@ -77,14 +77,14 @@ export class AuthService {
   }
   async register(createAuthDto: createUserDto, isVerified: boolean = false) {
     try {
-      const existUser = this.prisma.user.findFirst({
+      const existUser = await this.prisma.user.findUnique({
         where: {
           email: createAuthDto.email,
         },
       });
       if (existUser) throw new BadRequestException('User already exist');
       const { password, ...rest } = createAuthDto as Required<createUserDto>;
-      const hashedPassword = bycrypt.hashSync(password, 12);
+      const hashedPassword = hashSync(password, 12);
 
       const newUser = await this.prisma.user.create({
         data: {
@@ -93,7 +93,33 @@ export class AuthService {
           isVerified: isVerified,
         },
       });
-
+      if (!isVerified) {
+        const code = randomBytes(4).toString('hex');
+        const token = this.jwt.sign(
+          {
+            sub: newUser.id,
+            email: newUser.email,
+            code,
+            exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
+          },
+          {
+            expiresIn: '1h',
+          },
+        );
+        this.mailerService.sendEmail(
+          newUser.email,
+          'Verify your email',
+          `${frontUrl}/verify?token=${token}`,
+        );
+        this.prisma.user.update({
+          where: {
+            id: existUser.id,
+          },
+          data: {
+            verifyToken: token,
+          },
+        });
+      }
       const { password: _, ...user } = newUser;
       const payload = {
         sub: newUser.id,
@@ -102,10 +128,10 @@ export class AuthService {
         role: newUser.role,
         isVerified: newUser.isVerified,
       };
+
       const accessToken = await this.jwt.signAsync(
         {
           ...payload,
-          exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
         },
         {
           expiresIn: '1h',
@@ -114,34 +140,38 @@ export class AuthService {
       const refreshToken = await this.jwt.signAsync(
         {
           ...payload,
-          exp: Date.now() + 1000 * 60 * 60 * 24 * 30,
         },
         {
           expiresIn: '30d',
         },
       );
+      this.prisma.user.update({
+        where: {
+          id: newUser.id,
+        },
+        data: {
+          refreshToken,
+          accessToken,
+        },
+      });
       return {
         accessToken,
         refreshToken,
         user: newUser,
       };
     } catch (e) {
-      console.log(e);
       throw new BadRequestException("Can't create user");
     }
   }
 
   async login(body: loginDto) {
-    const existUser = await this.prisma.user.findFirst({
+    const existUser = await this.prisma.user.findUnique({
       where: {
         email: body.email,
       },
     });
     if (!existUser) throw new BadRequestException('User not found');
-    const isValidPassword = bycrypt.compareSync(
-      body.password,
-      existUser.password,
-    );
+    const isValidPassword = compareSync(body.password, existUser.password);
     if (!isValidPassword) throw new BadRequestException('Invalid password');
     const { password, ...rest } = existUser;
     const payload = {
@@ -154,7 +184,6 @@ export class AuthService {
     const accessToken = await this.jwt.signAsync(
       {
         ...payload,
-        exp: Date.now() + 1000 * 60 * 60 * 24 * 3,
       },
       {
         expiresIn: '1h',
@@ -163,20 +192,22 @@ export class AuthService {
     const refreshToken = await this.jwt.signAsync(
       {
         ...payload,
-        exp: Date.now() + 1000 * 60 * 60 * 24 * 30,
       },
       {
         expiresIn: '30d',
       },
     );
-    this.prisma.user.update({
+    const updated = await this.prisma.user.update({
       where: {
         id: existUser.id,
       },
       data: {
         lastLogin: new Date(),
+        accessToken,
+        refreshToken,
       },
     });
+
     return {
       accessToken,
       refreshToken,

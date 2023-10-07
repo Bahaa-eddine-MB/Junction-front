@@ -11,8 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
-import { TeacherSchema, teacherDto } from './dto/teacher.dto';
-import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { TeacherSchema, basicTechDto, teacherDto } from './dto/teacher.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AllowedRoles } from 'src/decorators/roles.decorator';
 import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
@@ -40,7 +39,7 @@ export class TeacherController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto) {
+  update(@Param('id') id: string, @Body() updateTeacherDto: basicTechDto) {
     return this.teacherService.update(id, updateTeacherDto);
   }
 

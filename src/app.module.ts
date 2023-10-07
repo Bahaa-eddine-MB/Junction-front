@@ -9,12 +9,10 @@ import { LessonsModule } from './modules/lessons/lessons.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { EmailModule } from './modules/email/email.module';
-import { AdminModule } from './modules/admin/admin.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
 import { StudentModule } from './modules/student/student.module';
 import { PlanModule } from './modules/plan/plan.module';
 import { PathModule } from './modules/path/path.module';
-import { FieldModule } from './modules/field/field.module';
 import { SubscriptionModule } from './modules/subscription/subscription.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { ArticlesModule } from './modules/articles/articles.module';
@@ -22,6 +20,9 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { ExamModule } from './modules/exam/exam.module';
 import { MaterialModule } from './modules/material/material.module';
 import { QaModule } from './modules/qa/qa.module';
+import { FieldsModule } from './modules/fields/fields.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronService } from './cron/cron.service';
 @Module({
   imports: [
     PrismaModule,
@@ -35,12 +36,11 @@ import { QaModule } from './modules/qa/qa.module';
       signOptions: { expiresIn: '1h' },
     }),
     EmailModule,
-    AdminModule,
+    // AdminModule,
     TeacherModule,
     StudentModule,
     PlanModule,
     PathModule,
-    FieldModule,
     SubscriptionModule,
     ReviewsModule,
     ArticlesModule,
@@ -48,8 +48,10 @@ import { QaModule } from './modules/qa/qa.module';
     MaterialModule,
     ExamModule,
     QaModule,
+    FieldsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CronService],
 })
 export class AppModule {}

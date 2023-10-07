@@ -1,6 +1,8 @@
 import {
   ExecutionContext,
   ForbiddenException,
+  HttpException,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -9,33 +11,34 @@ import { UserRoles } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthRequest } from 'src/interfaces/request';
 
+@Injectable()
 export class AuthGuard extends AuthGuardPassport('jwt') {
   constructor(
-    private reflector: Reflector,
+    private readonly reflector: Reflector,
     private readonly prisma: PrismaService,
   ) {
     super();
   }
   async canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>('public', [
+    const isPublic = this.reflector.get<boolean>(
+      'public',
       context.getHandler(),
-      context.getClass(),
-    ]);
+    );
     if (isPublic) return true;
 
     const roles = this.reflector.get<UserRoles[]>(
       'roles',
       context.getHandler(),
-    );
+    ) ?? ['ALL'];
 
-    super.canActivate(context);
+    await super.canActivate(context);
     const request: AuthRequest = context.switchToHttp().getRequest();
     try {
       const user = request.user;
       if (!user) throw new UnauthorizedException();
-      if (!user.isVerified) {
-        throw new ForbiddenException('Unauthorized please verify your email');
-      }
+      // if (!user.isVerified) {
+      //   throw new ForbiddenException('Unauthorized please verify your email');
+      // }
       if (user.role === 'ADMIN') return true;
 
       if (roles && !roles.includes(user.role))
@@ -52,7 +55,7 @@ export class AuthGuard extends AuthGuardPassport('jwt') {
       }
       return true;
     } catch (e) {
-      throw new UnauthorizedException('User Unauthorize');
+      throw new HttpException(e.message, e.status);
     }
   }
 

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MaterialService } from './material.service';
 import { MaterialController } from './material.controller';
-import { PrismaService } from '../prisma/prisma.service';
-import { AuthGuard } from '../auth/auth.guard';
+import { PrismaModule } from '../prisma/prisma.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [MaterialController],
   providers: [MaterialService],
-  imports: [PrismaService, AuthGuard],
+  imports: [PrismaModule, AuthModule],
 })
 export class MaterialModule {}

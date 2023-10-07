@@ -9,11 +9,11 @@ import {
   UsePipes,
   UseGuards,
 } from '@nestjs/common';
-import { FieldService } from './field.service';
-import { CreateFieldSchema, fieldDto } from './dto/create-field.dto';
+import { FieldService } from './fields.service';
 import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
-import { AuthGuard } from '@nestjs/passport';
 import { AllowedRoles } from 'src/decorators/roles.decorator';
+import { fieldDto, CreateFieldSchema } from './dto/fields.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @AllowedRoles('ADMIN')
 @UseGuards(AuthGuard)
