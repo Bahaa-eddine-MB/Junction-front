@@ -134,7 +134,7 @@ export class AuthService {
           ...payload,
         },
         {
-          expiresIn: '1h',
+          expiresIn: '8h',
         },
       );
       const refreshToken = await this.jwt.signAsync(
@@ -186,7 +186,7 @@ export class AuthService {
         ...payload,
       },
       {
-        expiresIn: '1h',
+        expiresIn: '8h',
       },
     );
     const refreshToken = await this.jwt.signAsync(
