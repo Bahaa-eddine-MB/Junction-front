@@ -38,8 +38,7 @@ export default function Login() {
 
 const onSubmit: SubmitHandler<LoginForm> = async (data) => {
 
-  try {
-    const response = await axios.post('/api/login', data); 
+
   
   
       toast({
@@ -49,17 +48,9 @@ const onSubmit: SubmitHandler<LoginForm> = async (data) => {
       console.log('err');
    
  
-      router.push('/profile');
+      router.push('/home');
   
-  } catch (error) {
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: 'something wrong',
-    })
-    console.error('Error:', error);
 
-  }
 };
 
 
