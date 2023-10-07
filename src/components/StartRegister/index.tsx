@@ -16,6 +16,51 @@ import diamond from "@/images/diamond.png";
 import yes from "@/icons/yes.svg";
 import no from "@/icons/no.svg";
 
+
+const fieldsAndPrograms = [
+  {
+    title: "Cybersecurity",
+    description: "Description for Cybersecurity.",
+    programs: [
+      "Cybersecurity Analyst",
+      "Ethical Hacker",
+      "Security Engineer",
+      "Chief Information Security Officer (CISO)",
+    ],
+  },
+
+  {
+    title: "Artificial Intelligence (AI)",
+    description: "Description for Artificial Intelligence (AI).",
+    programs: [
+      "AI Research Scientist",
+      "Natural Language Processing (NLP) Engineer",
+      "Computer Vision Engineer",
+      "Robotics Engineer",
+    ],
+  },
+  {
+    title: "Embedded Systems",
+    description: "Description for Embedded Systems.",
+    programs: [
+      "Embedded Systems Engineer",
+      "Firmware Developer",
+      "IoT (Internet of Things) Specialist",
+      "Robotics Software Engineer",
+    ],
+  },
+  {
+    title: "Web Development",
+    description: "Description for Web Development.",
+    programs: [
+      "Web Designer",
+      "Web Developer",
+      "UI/UX Designer",
+      "Web Application Architect",
+    ],
+  },
+];
+
 const schema = yup.object().shape({
   firstname: yup.string().min(3).required("first name is required"),
   lastname: yup.string().min(3).required("Last name is required"),
@@ -49,7 +94,8 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
     console.log(data);
     goNext();
   };
-  const [selectedPlan, setSelectedPlan] = useState("1");
+  const [selectedPlan, setSelectedPlan] = useState("0");
+  const [selectedProgramme, setSelectedProgrmme] = useState("0");
 
   return (
     <section className="relative overflow-hidden container mx-auto min-h-screen font-poppins  bg-gradient-to-r from-white via-thirdColor to-purple-50">
@@ -69,6 +115,47 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
         <div className="pt-8 ml-24">
           <Image height={100} width={100} src={logo} alt="KEYBOX" />
         </div>
+        <p className="text-4xl font-bold flex pt-16 px-24 text-secondaryColor pb-16">
+          Choose Your programme
+        </p>
+
+        <div className="grid grid-cols-2 gap-8 px-32">
+          {fieldsAndPrograms.map((field, index) => (
+            <div
+              key={index}
+              onClick={() => setSelectedProgrmme((index + 1).toString())}
+              className={`flex flex-col gap-4 border-[1.5px] rounded-sm border-secondaryColor border-opacity-70 p-6 hover:cursor-pointer ${
+                selectedProgramme == (index + 1).toString()
+                  ? "bg-secondaryColor bg-opacity-70 text-white"
+                  : "text-secondaryColor text-opacity-70"
+              }`}
+            >
+              <div className="flex justify-between">
+                <h2 className="text-4xl font-bold  ">{field.title}</h2>
+
+                <div
+                  className={`border-2  rounded-full w-10 h-10 flex items-center justify-center ${
+                    selectedProgramme != (index + 1).toString()
+                      ? "border-secondaryColor border-opacity-70"
+                      : "border-white"
+                  }`}
+                >
+                  <div
+                    className={`${
+                      selectedProgramme != (index + 1).toString() && "hidden"
+                    } w-8 h-8  rounded-full p-2 bg-white`}
+                  />
+                </div>
+              </div>
+              <p className="text-sm">{field.description}</p>
+              <ul className="mt-2">
+                {field.programs.map((program, programIndex) => (
+                  <li key={programIndex}>{program}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
         <p className="text-4xl font-bold flex pt-16 px-24 text-secondaryColor pb-16">
           Choose Your plan
@@ -86,27 +173,34 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
                 <Image alt="silver" src={silver} />
                 <p className="text-black font-bold text-3xl">Silver</p>
               </div>
-                {selectedPlan =="1" && 
+              {selectedPlan == "1" && (
                 <div className="border-2 border-primaryColor rounded-full w-10 h-10 flex items-center justify-center">
-                <div className="w-8 h-8 bg-primaryColor rounded-full p-2"/>
-                </div>}
+                  <div className="w-8 h-8 bg-primaryColor rounded-full p-2" />
+                </div>
+              )}
             </div>
             <div className=" space-y-8 pt-8">
               <div className="flex gap-4 items-center ">
                 <Image alt="yes" src={yes} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
               <div className="flex gap-4 items-center ">
                 <Image alt="yes" src={yes} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
               <div className="flex gap-4 items-center ">
                 <Image alt="no" width={33} src={no} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
             </div>
           </div>
-             <div
+          <div
             onClick={() => setSelectedPlan("2")}
             className={`bg-white rounded-md hover:bg-primaryColor hover:bg-opacity-25 transition-all duration-300 px-8 pt-4 pb-12 ${
               selectedPlan == "2" && "border-2 border-primaryColor"
@@ -117,27 +211,34 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
                 <Image alt="silver" src={gold} />
                 <p className="text-black font-bold text-3xl">Gold</p>
               </div>
-                {selectedPlan =="2" && 
+              {selectedPlan == "2" && (
                 <div className="border-2 border-primaryColor rounded-full w-10 h-10 flex items-center justify-center">
-                <div className="w-8 h-8 bg-primaryColor rounded-full p-2"/>
-                </div>}
+                  <div className="w-8 h-8 bg-primaryColor rounded-full p-2" />
+                </div>
+              )}
             </div>
             <div className=" space-y-8 pt-8">
               <div className="flex gap-4 items-center ">
                 <Image alt="yes" src={yes} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
               <div className="flex gap-4 items-center ">
                 <Image alt="yes" src={yes} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
               <div className="flex gap-4 items-center ">
                 <Image alt="no" width={33} src={no} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
             </div>
           </div>
-             <div
+          <div
             onClick={() => setSelectedPlan("3")}
             className={`bg-white rounded-md hover:bg-primaryColor hover:bg-opacity-25 transition-all duration-300 px-8 pt-4 pb-12 ${
               selectedPlan == "3" && "border-2 border-primaryColor"
@@ -148,105 +249,113 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
                 <Image alt="silver" src={diamond} />
                 <p className="text-black font-bold text-3xl">Diamond</p>
               </div>
-                {selectedPlan =="3" && 
+              {selectedPlan == "3" && (
                 <div className="border-2 border-primaryColor rounded-full w-10 h-10 flex items-center justify-center">
-                <div className="w-8 h-8 bg-primaryColor rounded-full p-2"/>
-                </div>}
+                  <div className="w-8 h-8 bg-primaryColor rounded-full p-2" />
+                </div>
+              )}
             </div>
             <div className=" space-y-8 pt-8">
               <div className="flex gap-4 items-center ">
                 <Image alt="yes" src={yes} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
               <div className="flex gap-4 items-center ">
                 <Image alt="yes" src={yes} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
               <div className="flex gap-4 items-center ">
                 <Image alt="no" width={33} src={no} />
-                <p className="text-thirdColor text-base">Offer</p>
+                <p className="text-secondaryColor text-opacity-40 text-base">
+                  Offer
+                </p>
               </div>
             </div>
           </div>
         </div>
+        {selectedPlan !== "0" && selectedProgramme !== "0" && (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="grid grid-cols-2 mx-20 mt-16  px-16 gap-8 py-14 bg-white rounded-md p-16"
+          >
+            <div className="col-span-2 text-3xl font-bold flex  text-secondaryColor ">
+              Registration
+            </div>
+            <Input
+              password={false}
+              label="First name"
+              error={errors.firstname?.message}
+              inputProps={{
+                placeholder: "Enter your first name",
+                ...register("firstname"),
+              }}
+            />
+            <Input
+              password={true}
+              label="Password"
+              error={errors.password?.message}
+              inputProps={{
+                placeholder: "Enter your password",
+                ...register("password"),
+              }}
+            />
+            <Input
+              password={false}
+              label="Last name"
+              error={errors.lastname?.message}
+              inputProps={{
+                placeholder: "Enter your last name",
+                ...register("lastname"),
+              }}
+            />
+            <Input
+              password={true}
+              label="Confirm password"
+              error={errors.confirmPassword?.message}
+              inputProps={{
+                placeholder: "Confirm your password",
+                ...register("confirmPassword"),
+              }}
+            />
+            <Input
+              password={false}
+              label="Email"
+              error={errors.email?.message}
+              inputProps={{
+                placeholder: "Enter your email",
+                ...register("email"),
+              }}
+            />
+            <Input
+              password={false}
+              label="Phone number"
+              error={errors.phone?.message}
+              inputProps={{
+                type: "number",
+                placeholder: "Enter your phone number",
+                ...register("phone"),
+              }}
+            />
+            <Input
+              password={false}
+              label="Age"
+              error={errors.Age?.message}
+              inputProps={{
+                type: "number",
+                placeholder: "Enter your age here",
+                ...register("Age"),
+              }}
+            />
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-2 mx-20 mt-16  px-16 gap-8 py-14 bg-white rounded-md p-16"
-        >
-          <div className="col-span-2 text-3xl font-bold flex  text-secondaryColor ">
-            Registration
-          </div>
-          <Input
-            password={false}
-            label="First name"
-            error={errors.firstname?.message}
-            inputProps={{
-              placeholder: "Enter your first name",
-              ...register("firstname"),
-            }}
-          />
-          <Input
-            password={true}
-            label="Password"
-            error={errors.password?.message}
-            inputProps={{
-              placeholder: "Enter your password",
-              ...register("password"),
-            }}
-          />
-          <Input
-            password={false}
-            label="Last name"
-            error={errors.lastname?.message}
-            inputProps={{
-              placeholder: "Enter your last name",
-              ...register("lastname"),
-            }}
-          />
-          <Input
-            password={true}
-            label="Confirm password"
-            error={errors.confirmPassword?.message}
-            inputProps={{
-              placeholder: "Confirm your password",
-              ...register("confirmPassword"),
-            }}
-          />
-          <Input
-            password={false}
-            label="Email"
-            error={errors.email?.message}
-            inputProps={{
-              placeholder: "Enter your email",
-              ...register("email"),
-            }}
-          />
-          <Input
-            password={false}
-            label="Phone number"
-            error={errors.phone?.message}
-            inputProps={{
-              type: "number",
-              placeholder: "Enter your phone number",
-              ...register("phone"),
-            }}
-          />
-          <Input
-            password={false}
-            label="Age"
-            error={errors.Age?.message}
-            inputProps={{
-              type: "number",
-              placeholder: "Enter your age here",
-              ...register("Age"),
-            }}
-          />
-
-          <div className="col-span-2 text-right">
-            <Button className="px-16">Next</Button>
-          </div>
-        </form>
+            <div className="col-span-2 text-right">
+              <Button className="px-16">Next</Button>
+            </div>
+          </form>
+        )}
       </main>
     </section>
   );

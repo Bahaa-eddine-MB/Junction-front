@@ -60,6 +60,13 @@
    height: 200px;
    width: 100%;
  }
+ .scratch1{
+   background-image: url('../../public/images/scratch.svg') ;
+   background-size: cover;
+   background-repeat: no-repeat;
+   height: 100%;
+   width: 100%;
+ }
  .mySwiper {
    padding-bottom: 40px !important;
    height: 420px;
@@ -71,7 +78,7 @@
    width: 100%;
  }
  
- .swiper-slide:nth-child(4n+1) {
+ /* .swiper-slide:nth-child(4n+1) {
    transform: translateY(10%) !important;
    -webkit-transform: translateY(10%) !important;
    -moz-transform: translateY(10%) !important;
@@ -101,7 +108,7 @@
    -moz-transform: translateY(10%);
    -ms-transform: translateY(10%);
    -o-transform: translateY(10%);
- }
+ } */
  
  #cards:hover > .card::after {
    opacity: 1;
@@ -162,3 +169,11 @@
    position: absolute;
    z-index: 2;
  }
+
+ .Portfolio-slider {
+  margin-top: 3rem;
+  width: 100%;
+}
+.Portfolio-slider .swipe-slide {
+  width: 50rem;
+}
