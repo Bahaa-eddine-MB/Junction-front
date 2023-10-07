@@ -1,5 +1,5 @@
 import Layout from "../Layout";
-import ProfileProgress from "@/components/ProfileProgress";
+import ProfileProgress from "@/components/Profile/ProfileProgress";
 import Image from "next/image";
 import pc from "@/images/pc.png";
 import TeacherCard from "@/components/TeacherCard";

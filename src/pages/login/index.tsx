@@ -8,7 +8,11 @@ import logo from "@/images/logo.png";
 import login from "@/images/login.png";
 import { TypeAnimation } from "react-type-animation";
 import { useRouter } from "next/navigation";
-
+// import { ToastContainer, toast } from 'react-toastify';
+import axios from "axios";
+// import pRetry, {AbortError} from 'p-retry';
+import { useToast } from "@/components/ui/use-toast"
+import { ToastDemo } from "@/components/ui/toastButton";
 const schema = yup.object({
   email: yup
     .string()
@@ -20,6 +24,7 @@ const schema = yup.object({
 type LoginForm = yup.InferType<typeof schema>;
 
 export default function Login() {
+  const { toast } = useToast()
   const router = useRouter();
 
   const {
@@ -28,22 +33,55 @@ export default function Login() {
     formState: { errors, isSubmitting },
   } = useForm<LoginForm>({ resolver: yupResolver(schema) });
 
-  const onSubmit: SubmitHandler<LoginForm> = () => {
-    // const res = await signIn('credentials', {
-    //   ...data,
-    //   redirect: false,
-    // })
-    // if (res?.error) {
-    //   toast('error', res?.error)
-    // } else {
-    //   toast('success', 'Logged in successfully')
-    //   router.push('/profile')
-    // }
-  };
+
+
+
+const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+
+  try {
+    const response = await axios.post('/api/login', data); 
+  
+  
+      toast({
+        title: "login",
+        description: "login successfuly",
+      })
+      console.log('err');
+   
+ 
+      router.push('/profile');
+  
+  } catch (error) {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: 'something wrong',
+    })
+    console.error('Error:', error);
+
+  }
+};
+
+
+  // const onSubmit: SubmitHandler<LoginForm> = () => {
+  //   // const res = await signIn('credentials', {
+  //   //   ...data,
+  //   //   redirect: false,
+  //   // })
+  //   // if (res?.error) {
+  //   //   toast('error', res?.error)
+  //   // } else {
+  //   //   toast('success', 'Logged in successfully')
+  //   //   router.push('/profile')
+  //   // }
+  // };
+  
+  // const notify = () => toast("Wow so easy!");
 
   return (
     <>
-      <main className="container mx-auto min-h-screen font-poppins flex justify-between bg-gradient-to-r from-thirdColor via-thirdColor to-purple-50">
+      <main className=" min-h-screen font-poppins flex justify-between bg-gradient-to-r from-thirdColor via-thirdColor to-purple-50">
+  
         <div>
           <Image
             className="mt-8 ml-24"
@@ -133,7 +171,7 @@ export default function Login() {
             >
               Create account
             </span>
-            <Button className="px-14">Login</Button>
+            <Button className="w-40">Login</Button>
           </div>
         </form>
       </main>

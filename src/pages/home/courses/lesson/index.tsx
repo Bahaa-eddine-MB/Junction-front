@@ -1,4 +1,4 @@
-import ProfileProgress from "@/components/ProfileProgress";
+import ProfileProgress from "@/components/Profile/ProfileProgress";
 import Layout from "../../Layout";
 import Image from "next/image";
 import Lesson from "@/images/lesson.png";
