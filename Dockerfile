@@ -1,6 +1,11 @@
 FROM node:alpine3.18
 
-WORKDIR /usr/src/app
+
+RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
+
+RUN mkdir -p /app/node_modules && chown -R nodejs:nodejs /app
+
+WORKDIR /app
 
 COPY package*.json ./
 
@@ -15,3 +20,5 @@ EXPOSE 8055
 RUN npm run build
 
 CMD [ "node", "dist/main.js" ]
+
+
