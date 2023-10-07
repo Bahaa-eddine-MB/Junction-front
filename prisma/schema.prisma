@@ -62,19 +62,20 @@ model User {
 
 // ! Teacher model 
 model Teacher {
-  id         String     @id @default(uuid()) @db.Uuid
-  experience String     @db.VarChar(180)
-  about      String     @db.VarChar(200)
-  user       User       @relation(fields: [userId], references: [id], name: "teacher")
-  userId     String     @unique @db.Uuid
-  createdAt  DateTime   @default(now())
+  id         String      @id @default(uuid()) @db.Uuid
+  experience String      @db.VarChar(180)
+  about      String      @db.VarChar(200)
+  user       User        @relation(fields: [userId], references: [id], name: "teacher")
+  userId     String      @unique @db.Uuid
+  createdAt  DateTime    @default(now())
   courses    Courses[]
   answers    Answers[]
-  field      Field      @relation(fields: [fieldId], references: [id])
-  fieldId    String     @db.Uuid
+  field      Field       @relation(fields: [fieldId], references: [id])
+  fieldId    String      @db.Uuid
   Articles   Articles[]
   Homework   Homework[]
   Lessons    Lessons[]
+  Materials  Materials[]
 }
 
 // ! Teacher model 
@@ -143,10 +144,12 @@ model Courses {
 
 model Materials {
   id        String   @id @default(uuid()) @db.Uuid
-  title     String   @unique @db.VarChar(60)
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String   @db.Uuid
   createdAt DateTime @default(now())
   courses   Courses  @relation(fields: [coursesId], references: [id], onDelete: Cascade)
   coursesId String   @db.Uuid
+  url       String   @unique
 
   @@index([coursesId], name: "material_courses")
 }

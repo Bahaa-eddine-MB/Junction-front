@@ -11,6 +11,8 @@ import {
   HttpCode,
   UseInterceptors,
   UseGuards,
+  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -84,5 +86,13 @@ export class AuthController {
   @Public()
   updatePassword(@Body() body: { password: string; otp: string }) {
     return this.authService.verifyOtpWithPassword(body.otp, body.password);
+  }
+  @Public()
+  @Post('refresh-token')
+  @UseInterceptors(TokenCookieInterceptor)
+  requestRefresh(@Query() query: { email: string; token: string }) {
+    if (!query.email || query.token)
+      throw new BadRequestException('Error when trying to get refresh token');
+    this.authService.getAccessToken(query.token, query.email);
   }
 }

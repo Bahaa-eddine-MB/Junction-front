@@ -1,26 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePlanDto } from './dto/create-plan.dto';
-import { UpdatePlanDto } from './dto/update-plan.dto';
+import { planDto } from './dto/plan.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PlanService {
-  create(createPlanDto: CreatePlanDto) {
-    return 'This action adds a new plan';
+  constructor(private readonly prisma: PrismaService) {}
+  create(body: planDto) {
+    return this.prisma.plan.create({
+      data: {
+        desc: body.desc,
+        duration: body.duration,
+        title: body.title,
+        price: body.price,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all plan`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} plan`;
-  }
-
-  update(id: number, updatePlanDto: UpdatePlanDto) {
-    return `This action updates a #${id} plan`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} plan`;
+  async findAll() {
+    return await this.prisma.plan.findMany();
   }
 }
