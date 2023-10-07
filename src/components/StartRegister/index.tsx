@@ -352,7 +352,7 @@ const StartRegister = ({ goNext }: { goNext: () => void }) => {
             />
 
             <div className="col-span-2 text-right">
-              <Button className="px-16">Next</Button>
+              <Button className="w-40">Next</Button>
             </div>
           </form>
         )}

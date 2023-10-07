@@ -10,6 +10,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import eclips from "@/images/Ellipse.svg";
 import wave from "@/images/waves.svg";
+import { useEffect, useState } from "react";
 
 const schema = yup.object().shape({
   cardName: yup.string().required("Card name is required"),
@@ -43,6 +44,12 @@ const ConfirmCard = ({ goBack }: { goBack: () => void }) => {
     // Handle form submission here
     console.log(data);
   };
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
 
   return (
     <section className="relative overflow-hidden container mx-auto min-h-screen font-poppins  bg-gradient-to-r from-white via-thirdColor to-purple-50">
@@ -63,7 +70,7 @@ const ConfirmCard = ({ goBack }: { goBack: () => void }) => {
           <Image height={100} width={100} src={logo} alt="KEYBOX" />
         </div>
         <div className="px-28 pt-28">
-          <EmailToast loading={true} />
+          <EmailToast loading={loading} />
         </div>
         <span className="text-4xl font-bold flex pt-16 px-24">
           <p className="pr-3 text-secondaryColor text-opacity-80">Card</p>
@@ -125,7 +132,7 @@ const ConfirmCard = ({ goBack }: { goBack: () => void }) => {
             >
               Go back
             </span>
-            <Button className="px-16">Confirm</Button>
+            <Button className="w-40">Confirm</Button>
           </div>
         </form>
       </main>
