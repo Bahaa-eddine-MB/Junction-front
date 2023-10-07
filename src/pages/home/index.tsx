@@ -12,8 +12,13 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import cadr from "@/icons/cadr.svg";
+import { useState } from "react";
+import chat from "@/icons/chat.svg";
+import ChatContainer from "@/components/chat/indext";
 
 const HomePage = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false); // Create a state variable for chat visibility
+
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -27,6 +32,13 @@ const HomePage = () => {
       breakpoint: { max: 464, min: 0 },
       items: 1,
     },
+  };
+  const hideChat = () => {
+    setIsChatOpen(false);
+  };
+
+  const showChat = () => {
+    setIsChatOpen(true);
   };
 
   return (
@@ -211,6 +223,21 @@ const HomePage = () => {
           <span className="text-primaryColor underline flex justify-center py-8 text-2xl hover:cursor-pointer">
             see all
           </span>
+          <div className={`fixed right-8 bottom-8 z-30`}>
+            <button
+              onClick={showChat}
+              className="w-16 h-16 bg-primaryColor text-white rounded-full hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center"
+            >
+              <Image
+                src={chat}
+                alt="chat"
+                width={24}
+                height={24}
+                className="fill-current text-white"
+              />
+            </button>
+            <ChatContainer isOpen={isChatOpen} toggleChat={hideChat} />
+          </div>
         </section>
       </Layout>
     </>
