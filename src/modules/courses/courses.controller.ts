@@ -14,15 +14,17 @@ import { CourseSchema, courseDto } from './dto/course.dto';
 import { AllowedRoles } from 'src/decorators/roles.decorator';
 import { AuthRequest } from 'src/interfaces/request';
 import { optionsDto } from 'src/dto/options';
+import { ZodValidationPipe } from 'src/pipes/zod-pipe.pipe';
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
-  @UsePipes(CourseSchema)
+  @UsePipes(new ZodValidationPipe(CourseSchema))
   @AllowedRoles('TEACHER')
   createCourse(@Body() body: courseDto, @Request() request: AuthRequest) {
+    console.log(body);
     return this.coursesService.create(body, request.user.id);
   }
 

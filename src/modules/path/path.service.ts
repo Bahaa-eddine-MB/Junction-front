@@ -21,9 +21,12 @@ export class PathService {
             },
           },
           courses: {
-            connect: createPathDto.selectedCourses.map((courseId) => ({
-              id: courseId,
-            })),
+            connect:
+              createPathDto.selectedCourses.length > 0
+                ? createPathDto.selectedCourses.map((courseId) => ({
+                    id: courseId,
+                  }))
+                : [],
           },
         },
       });

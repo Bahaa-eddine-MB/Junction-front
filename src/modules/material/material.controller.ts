@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   UseGuards,
   Request,
@@ -50,12 +49,11 @@ export class MaterialController {
       }),
     )
     file: Express.Multer.File,
-    @Body()
-    body: materialDto,
     @Request() request: AuthRequest,
+    @Query() query: materialDto,
   ) {
     return await this.materialService.createMaterial(
-      body,
+      query,
       request.user.id,
       file.path,
     );
