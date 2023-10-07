@@ -21,6 +21,8 @@ import { ExamModule } from './modules/exam/exam.module';
 import { MaterialModule } from './modules/material/material.module';
 import { QaModule } from './modules/qa/qa.module';
 import { FieldsModule } from './modules/fields/fields.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronService } from './cron/cron.service';
 @Module({
   imports: [
     PrismaModule,
@@ -47,8 +49,9 @@ import { FieldsModule } from './modules/fields/fields.module';
     ExamModule,
     QaModule,
     FieldsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CronService],
 })
 export class AppModule {}
