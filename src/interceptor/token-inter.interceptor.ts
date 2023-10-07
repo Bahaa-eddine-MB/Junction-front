@@ -15,7 +15,7 @@ export class TokenCookieInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap((data) => {
-        if (data.accessToken && data.refreshToken) {
+        if (data?.accessToken && data?.refreshToken) {
           const accessToken = data.accessToken;
           const refreshToken = data.refreshToken;
           response.setHeader('Authorization', `Bearer ${accessToken}`);

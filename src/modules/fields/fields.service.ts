@@ -11,11 +11,6 @@ export class FieldService {
         data: {
           name: createFieldDto.name,
           desc: createFieldDto.desc,
-          paths: {
-            connect: createFieldDto.paths.map((pathId) => ({
-              id: pathId,
-            })),
-          },
         },
       });
     } catch (e) {
@@ -36,11 +31,6 @@ export class FieldService {
         data: {
           desc: fieldDto.desc,
           name: fieldDto.name,
-          paths: {
-            connect: fieldDto.paths.map((pathId) => ({
-              id: pathId,
-            })),
-          },
         },
       });
     } catch (e) {
