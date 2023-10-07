@@ -23,7 +23,7 @@ const SideBar = ({
     { icon: home, label: "Home", route: "/home" },
     { icon: profile, label: "Profile", route: "/home/my-profile" },
     { icon: achivement, label: "Achievements", route: "/home/achievements" },
-    { icon: teacher, label: "Teachers", route: "/home/teachers" },
+    { icon: teacher, label: "Teachers", route: "/home/courses" },
     { icon: sub, label: "Subscription", route: "/home/subscription" },
     { icon: tasks, label: "Tasks", route: "/home/tasks" },
   ];
