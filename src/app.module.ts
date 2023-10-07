@@ -33,7 +33,7 @@ import { CronService } from './cron/cron.service';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'secret',
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '5h' },
     }),
     EmailModule,
     // AdminModule,
