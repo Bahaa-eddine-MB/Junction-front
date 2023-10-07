@@ -4,7 +4,6 @@ import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import * as ngrok from '@ngrok/ngrok';
 import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,8 +19,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  ngrok.listen(app).then(() => {
-	console.log("url:", app.tunnel.url());
   await app.listen(8055);
 }
-bootstrap()
+bootstrap();
