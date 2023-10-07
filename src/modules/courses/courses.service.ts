@@ -108,11 +108,23 @@ export class CoursesService {
           },
         },
       });
-      return this.prisma.courses.findMany({
+      return await this.prisma.courses.findMany({
         take: limit,
         skip: (page - 1) * limit,
         where: {
           pathId: student.path.id,
+        },
+        include: {
+          reviews: {
+            select: {
+              rate: true,
+            },
+          },
+          _count: {
+            select: {
+              reviews: true,
+            },
+          },
         },
       });
     } catch (e) {
@@ -150,6 +162,7 @@ export class CoursesService {
       include: {
         teacher: true,
         lessons: true,
+        reviews: true,
       },
     });
   }

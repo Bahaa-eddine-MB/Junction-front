@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { HomeworkService } from './homework.service';
 import { HomeworkController } from './homework.controller';
-import { PrismaService } from '../prisma/prisma.service';
-import { AuthGuard } from '../auth/auth.guard';
+import { PrismaModule } from '../prisma/prisma.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [HomeworkController],
   providers: [HomeworkService],
-  imports: [PrismaService, AuthGuard],
+  imports: [PrismaModule, AuthModule],
 })
 export class HomeworkModule {}

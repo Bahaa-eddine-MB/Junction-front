@@ -22,6 +22,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { ExamModule } from './modules/exam/exam.module';
 import { MaterialModule } from './modules/material/material.module';
 import { QaModule } from './modules/qa/qa.module';
+import { FieldsModule } from './modules/fields/fields.module';
 @Module({
   imports: [
     PrismaModule,
@@ -35,12 +36,12 @@ import { QaModule } from './modules/qa/qa.module';
       signOptions: { expiresIn: '1h' },
     }),
     EmailModule,
-    AdminModule,
+    // AdminModule,
     TeacherModule,
     StudentModule,
     PlanModule,
     PathModule,
-    FieldModule,
+    // FieldModule,
     SubscriptionModule,
     ReviewsModule,
     ArticlesModule,
@@ -48,6 +49,7 @@ import { QaModule } from './modules/qa/qa.module';
     MaterialModule,
     ExamModule,
     QaModule,
+    FieldsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
