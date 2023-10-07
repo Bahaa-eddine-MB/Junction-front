@@ -17,8 +17,7 @@ ENV JWT_SECRET=nt5uQD2AnG6xXEsmN1olU1b062giie0TtpIy38lWwzg=
 
 EXPOSE 8055
 
-RUN npm run build
 
-CMD [ "node", "dist/main.js" ]
+CMD [ "npm", "run", "start:dev" ]
 
 
