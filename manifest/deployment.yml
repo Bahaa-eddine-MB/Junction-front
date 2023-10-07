@@ -17,7 +17,7 @@ spec:
         - name: junction-service-app
           image: xenos.azurecr.io/junction-service:${{ github.sha }}
           ports:
-            - containerPort: 5000
+            - containerPort: 8055
          
 ---
 apiVersion: v1
@@ -28,7 +28,7 @@ metadata:
 spec:
   selector:
     app: junction-service
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
