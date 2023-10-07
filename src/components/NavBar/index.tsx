@@ -72,26 +72,28 @@ const NavBar = ({ openSideBar }: { openSideBar: () => void }) => {
             </div>
           </div>
           <div className="w-full h-[1px] bg-thirdColor px-8" />
-          <div className="flex gap-8 pt-8">
-            <Image
-              className="self-start  w-16 h-16"
-              height={80}
-              width={80}
-              src={pic}
-              alt=" teacher"
-            />
-            <div className="flex flex-col">
-              <h2 className="text-secondaryColor font-semibold text-lg">
-                Task to do
-              </h2>
-              <p className="text-textColor pl-4  pt-4">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore
-                quaerat ipsum eveniet. Alias expedita...
-              </p>
-              <span className="flex gap-2 pl-4 pt-4">
-                <p className="text-mainRed">Deadline :</p>
-                <p className="text-textColor">22/02/2023</p>
-              </span>
+          <div className="py-4 px-8">
+            <div className="flex gap-8 pt-8">
+              <Image
+                className="self-start  w-16 h-16"
+                height={80}
+                width={80}
+                src={pic}
+                alt=" teacher"
+              />
+              <div className="flex flex-col">
+                <h2 className="text-secondaryColor font-semibold text-lg">
+                  Task to do
+                </h2>
+                <p className="text-textColor pl-4  pt-4">
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Labore quaerat ipsum eveniet. Alias expedita...
+                </p>
+                <span className="flex gap-2 pl-4 pt-4">
+                  <p className="text-mainRed">Deadline :</p>
+                  <p className="text-textColor">22/02/2023</p>
+                </span>
+              </div>
             </div>
           </div>
         </div>
